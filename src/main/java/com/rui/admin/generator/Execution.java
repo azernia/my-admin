@@ -40,7 +40,6 @@ public class Execution {
         templateConfig.setServiceImpl(generatorConstants.getSERVICE_IMPL());
         autoGenerator.setTemplate(templateConfig);
 
-        //  自定义前端文件生成
         InjectionConfig injectionConfig = new InjectionConfig() {
             @Override
             public void initMap() {
@@ -50,13 +49,15 @@ public class Execution {
                 this.setMap(map);
             }
         };
+
         List<FileOutConfig> fileOutConfigs = new ArrayList<>();
-        fileOutConfigs.add(new FileOutConfig(generatorConstants.getVUE()) {
-            @Override
-            public String outputFile(TableInfo tableInfo) {
-                return generatorConstants.getFONT_END_OUT_PATH() + "/" + tableInfo.getEntityName() + ".vue";
-            }
-        });
+        //  自定义前端文件生成
+        // fileOutConfigs.add(new FileOutConfig(generatorConstants.getVUE()) {
+        //     @Override
+        //     public String outputFile(TableInfo tableInfo) {
+        //         return generatorConstants.getFONT_END_OUT_PATH() + "/" + tableInfo.getEntityName() + ".vue";
+        //     }
+        // });
         // 自定义 DTO
         fileOutConfigs.add(new FileOutConfig(generatorConstants.getREQUEST()) {
             @Override
@@ -83,7 +84,7 @@ public class Execution {
                 .setFileOverride(true) // 重新生成时是否覆盖
                 .setServiceName("%sService")
                 .setEnableCache(false) // 二级缓存
-                .setIdType(IdType.ASSIGN_UUID)    // 主键生成策略
+                .setIdType(IdType.AUTO)    // 主键生成策略
                 .setDateType(DateType.TIME_PACK)    // 定义实体类中日期类型
                 .setSwagger2(false);
         autoGenerator.setGlobalConfig(globalConfig);

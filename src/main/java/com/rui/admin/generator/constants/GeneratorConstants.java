@@ -51,7 +51,7 @@ public class GeneratorConstants {
      */
     private final String SERVE_OUT_PATH = YmlUtils.getSettingsValue("setting.serveOutPath");
 
-    private final String SERVE_MODEL_OUT_PATH = SERVE_OUT_PATH + YmlUtils.getSettingsValue("setting.serveModelOutPath");
+    private final String SERVE_MODEL_OUT_PATH = SERVE_OUT_PATH + YmlUtils.getSettingsValue("setting.serveModelOutPath") + "/" + MODULE_NAME + "/model";
 
     /**
      * 前端代码生成路径
@@ -61,7 +61,7 @@ public class GeneratorConstants {
     /**
      * 模板路径
      */
-    private static final String TEMPLATE_ROOT = "template";
+    private static final String TEMPLATE_ROOT = "templates";
 
     private final String CONTROLLER = TEMPLATE_ROOT + "/" + YmlUtils.getSettingsValue("setting.template.controller");
     private final String MAPPER = TEMPLATE_ROOT + "/" + YmlUtils.getSettingsValue("setting.template.mapper");
