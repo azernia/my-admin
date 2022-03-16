@@ -11,7 +11,7 @@ public class BaseEntity implements Serializable {
     @Version
     private Integer version;
 
-    @TableLogic(value = "1", delval = "0")
+    @TableLogic
     private Boolean deleted;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")

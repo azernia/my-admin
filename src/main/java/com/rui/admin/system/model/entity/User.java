@@ -1,14 +1,15 @@
 package com.rui.admin.system.model.entity;
 
-import com.rui.admin.commons.entity.BaseEntity;
-import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
-import java.time.LocalDateTime;
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.rui.admin.commons.entity.BaseEntity;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
 /**
  * 系统用户
  *
@@ -29,14 +30,6 @@ public class User extends BaseEntity {
     */
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
-
-
-
-
-
-
-
-
 
 
     /**
