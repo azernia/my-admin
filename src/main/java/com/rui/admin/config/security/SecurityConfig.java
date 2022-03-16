@@ -1,7 +1,7 @@
 package com.rui.admin.config.security;
 
 import com.rui.admin.commons.handler.security.*;
-import com.rui.admin.config.security.impl.UserDetailsServiceImpl;
+import com.rui.admin.system.service.impl.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

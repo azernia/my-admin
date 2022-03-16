@@ -1,4 +1,4 @@
-package com.rui.admin.config.security.impl;
+package com.rui.admin.system.service.impl;
 
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

@@ -1,11 +1,15 @@
 package com.rui.admin.config.security.entity;
 
+import com.rui.admin.system.model.entity.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 
 public class LoginUser implements UserDetails {
+
+    private User user;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return null;
@@ -13,12 +17,12 @@ public class LoginUser implements UserDetails {
 
     @Override
     public String getPassword() {
-        return null;
+        return user.getUsername();
     }
 
     @Override
     public String getUsername() {
-        return null;
+        return user.getPassword();
     }
 
     @Override
@@ -38,6 +42,6 @@ public class LoginUser implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return !user.getEnable();
     }
 }
