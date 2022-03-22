@@ -1,11 +1,17 @@
 package com.rui.admin.config.security.entity;
 
 import com.rui.admin.system.model.entity.User;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class LoginUser implements UserDetails {
 
     private User user;
@@ -17,12 +23,12 @@ public class LoginUser implements UserDetails {
 
     @Override
     public String getPassword() {
-        return user.getUsername();
+        return user.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return user.getPassword();
+        return user.getUsername();
     }
 
     @Override

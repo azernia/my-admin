@@ -6,6 +6,7 @@ import com.rui.admin.system.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDateTime;
@@ -40,6 +41,16 @@ class MyAdminApplicationTests {
     public void checkLogin() {
         User admin = userService.getOne(new LambdaQueryWrapper<User>().eq(User::getUsername, "admin"));
         System.out.println(passwordEncoder.matches("123456", admin.getPassword()));
+    }
+
+    @Test
+    public void updateUser() {
+        User admin = userService.getOne(new LambdaQueryWrapper<User>().eq(User::getUsername, "admin"));
+        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+        String encode = bCryptPasswordEncoder.encode("123456");
+        System.out.println(encode);
+        admin.setPassword(encode);
+        // userService.updateById(admin);
     }
 
 }
