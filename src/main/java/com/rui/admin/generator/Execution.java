@@ -118,7 +118,8 @@ public class Execution {
                 .setColumnNaming(NamingStrategy.underline_to_camel)
                 .setEntityLombokModel(true)
                 .setRestControllerStyle(true)
-                .setSuperEntityClass(BaseEntity.class);
+                .setSuperEntityClass(BaseEntity.class)
+                .setRestControllerStyle(true);
         autoGenerator.setStrategy(strategyConfig);
 
         autoGenerator.execute();
