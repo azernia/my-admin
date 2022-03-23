@@ -1,5 +1,6 @@
 package com.rui.admin.config.security;
 
+import com.rui.admin.commons.filter.cors.CorsFilter;
 import com.rui.admin.commons.filter.jwt.JwtAuthenticationTokenFilter;
 import com.rui.admin.commons.handler.security.*;
 import com.rui.admin.config.security.impl.UserDetailsServiceImpl;
@@ -15,10 +16,14 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.logout.LogoutFilter;
 
 @Configuration
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+    @Autowired
+    private CorsFilter corsFilter;
 
     @Autowired
     private UserDetailsServiceImpl userDetailsService;
@@ -109,6 +114,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 // 将自定义的过滤器放在指定过滤器之前
                 .addFilterBefore(jwtAuthenticationTokenFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(corsFilter, LogoutFilter.class)
                 .csrf().disable();
     }
 }
