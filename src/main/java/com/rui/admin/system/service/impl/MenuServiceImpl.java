@@ -6,6 +6,8 @@ import com.rui.admin.system.service.MenuService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
 * 系统菜单表 服务实现类
 *
@@ -15,4 +17,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements MenuService {
 
+    @Override
+    public List<String> getMenuPermissions(Integer userId) {
+        return baseMapper.getMenuPermissions(userId);
+    }
 }

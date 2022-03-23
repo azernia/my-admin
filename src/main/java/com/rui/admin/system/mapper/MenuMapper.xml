@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.rui.admin.system.mapper.MenuMapper">
-
+    <select id="getMenuPermissions" resultType="java.lang.String">
+        select
+               sm.authority
+        from sys_role_user sru
+         left join sys_role sr on sr.id = sru.role_id
+         left join sys_role_menu srm on sru.role_id = srm.role_id
+         left join sys_menu sm on sm.id = srm.menu_id
+        where sru.user_id = #{userId} and sr.enable = true
+    </select>
 </mapper>

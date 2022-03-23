@@ -3,6 +3,9 @@ package com.rui.admin.system.model.request;
 import lombok.Data;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+
+import java.io.Serializable;
+
 /**
  * 系统菜单表 DTO
  *
@@ -12,16 +15,12 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class MenuDTO {
+public class MenuDTO implements Serializable {
 
     /**
      * ID
      */
     private Integer id;
-
-
-
-
 
     /**
      * 菜单名称

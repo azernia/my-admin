@@ -11,13 +11,13 @@ spring:
     lettuce:
       pool:
         # 最大连接数
-        max-active: 20
+        max-active: 8
         # 最小空闲
-        min-idle: 5
+        min-idle: 4
         # 链接超时
-        max-wait: 5000ms
+        max-wait: 5000
         # 最大空闲
-        max-idle: 20
+        max-idle: 8
 
 # Mybatis-Plus 配置
 mybatis-plus:
@@ -25,7 +25,7 @@ mybatis-plus:
   type-enums-package: com.rui.admin.*.model.entity
   mapper-locations: classpath*:com/rui/admin/**/mapper/*.xml
   configuration:
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
 #  global-config:
 #    db-config:
 #      logic-delete-field: flag # 全局逻辑删除的实体字段名(since 3.3.0,配置后可以忽略不配置步骤2)

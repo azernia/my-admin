@@ -1,7 +1,7 @@
 package com.rui.admin.system.controller;
 
 import com.rui.admin.commons.entity.RespBean;
-import com.rui.admin.system.model.entity.User;
+import com.rui.admin.system.model.request.UserDTO;
 import com.rui.admin.system.service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,8 +20,8 @@ public class LoginController {
     private LoginService loginService;
 
     @PostMapping("/login")
-    public RespBean login(User user) {
-        return loginService.doLogin(user);
+    public RespBean login(UserDTO userDTO) {
+        return loginService.doLogin(userDTO);
     }
 
 }

@@ -29,19 +29,15 @@ public class Role extends BaseEntity {
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
-
-
-
-
-
-
-
-
-
     /**
     * 角色名称
     */
     private String name;
+
+    /**
+     * 角色中文名
+     */
+    private String nameZh;
 
 
     /**

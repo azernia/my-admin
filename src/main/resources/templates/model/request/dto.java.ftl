@@ -3,6 +3,7 @@ package ${cfg.packagePath}.model.request;
 <#--<#list table.importPackages as pkg>-->
 <#--import ${pkg};-->
 <#--</#list>-->
+import java.io.Serializable;
 <#if entityLombokModel>
 import lombok.Data;
 import lombok.AllArgsConstructor;
@@ -25,7 +26,7 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
     </#if>
 </#if>
-public class ${entity}DTO {
+public class ${entity}DTO implements Serializable {
 <#-- ----------  BEGIN 字段循环遍历  ---------->
 <#list table.fields as field>
     <#if field.keyFlag>

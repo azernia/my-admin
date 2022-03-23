@@ -8,7 +8,7 @@
     <springProfile name="dev,test">
         <logger name="org.springframework.web" level="INFO"/>
         <logger name="org.springboot.sample" level="INFO" />
-        <logger name="com.rui" level="DEBUG" />
+        <logger name="com.rui.admin" level="DEBUG" />
         <!--<logger name="com.wing.ufo.dao.ChargeApplyDao" level="ERROR" />-->
         <!--<logger name="com.wing.ufo.dao.CoinDao" level="ERROR" />-->
         <!--<logger name="com.wing.ufo.dao.CoinWalletDao" level="ERROR" />-->
@@ -20,7 +20,7 @@
     <springProfile name="pro">
         <logger name="org.springframework.web" level="ERROR"/>
         <logger name="org.springboot.sample" level="ERROR" />
-        <logger name="com.rui" level="ERROR" />
+        <logger name="com.rui.admin" level="ERROR" />
     </springProfile>
 
 </configuration>

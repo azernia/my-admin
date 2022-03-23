@@ -7,6 +7,7 @@ import com.rui.admin.system.model.entity.Role;
 import com.rui.admin.system.model.request.RoleDTO;
 import com.rui.admin.system.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -22,6 +23,7 @@ public class RoleController {
     @Autowired
     private RoleService roleService;
 
+    @PreAuthorize("hasAuthority('get:/rui/admin/role/pageList')")
     @GetMapping("/pageList")
     public PageResult<Role> pageList(RoleDTO roleDTO) {
         return roleService.pageList(roleDTO);

@@ -1,5 +1,6 @@
 package com.rui.admin.config.security;
 
+import com.rui.admin.commons.filter.jwt.JwtAuthenticationTokenFilter;
 import com.rui.admin.commons.handler.security.*;
 import com.rui.admin.config.security.impl.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,8 +11,10 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableGlobalMethodSecurity(prePostEnabled = true)
@@ -19,6 +22,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private UserDetailsServiceImpl userDetailsService;
+
+    @Autowired
+    private JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter;
 
     @Autowired
     private AuthenticationSuccessHandlerImpl authenticationSuccessHandler;
@@ -69,7 +75,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .accessDeniedHandler(accessDeniedHandler)
                 // 认证失败
                 .authenticationEntryPoint(authenticationEntryPoint)
-                // .and()
+                .and()
                 // .formLogin()
                 // .usernameParameter("username")
                 // .passwordParameter("password")
@@ -77,11 +83,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // .failureHandler(authenticationFailureHandler)
                 // .successHandler(authenticationSuccessHandler)
                 // .permitAll()
-                .and()
+                // .and()
                 .logout()
                 .logoutSuccessHandler(logoutSuccessHandler)
                 .permitAll()
                 .and()
+                //不通过Session获取SecurityContext
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                // 将自定义的过滤器放在指定过滤器之前
+                .addFilterBefore(jwtAuthenticationTokenFilter, UsernamePasswordAuthenticationFilter.class)
                 .csrf().disable();
     }
 }

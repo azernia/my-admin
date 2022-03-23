@@ -3,6 +3,9 @@ package com.rui.admin.system.model.response;
 import lombok.Data;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+
+import java.io.Serializable;
+
 /**
  * 系统菜单表 VO
  *
@@ -12,16 +15,12 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class MenuVO {
+public class MenuVO implements Serializable {
 
     /**
      * ID
      */
     private Integer id;
-
-
-
-
 
     /**
      * 菜单名称

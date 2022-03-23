@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
@@ -15,16 +16,12 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserDTO {
+public class UserDTO implements Serializable {
 
     /**
      * ID
      */
     private Integer id;
-
-
-
-
 
     /**
      * 用户名
@@ -65,4 +62,9 @@ public class UserDTO {
      * 邮箱
      */
     private String email;
+
+    /**
+     * 是否允许
+     */
+    private Boolean enable;
 }

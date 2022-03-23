@@ -1,56 +1,94 @@
 package com.rui.admin.myadmin;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.rui.admin.system.model.entity.User;
-import com.rui.admin.system.service.UserService;
+import cn.hutool.jwt.JWT;
+import cn.hutool.jwt.JWTPayload;
+import cn.hutool.jwt.JWTUtil;
+import com.rui.admin.system.model.entity.Menu;
+import com.rui.admin.system.model.entity.Role;
+import com.rui.admin.system.model.entity.RoleMenu;
+import com.rui.admin.system.model.entity.RoleUser;
+import com.rui.admin.system.service.MenuService;
+import com.rui.admin.system.service.RoleMenuService;
+import com.rui.admin.system.service.RoleService;
+import com.rui.admin.system.service.RoleUserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 
 @SpringBootTest
 class MyAdminApplicationTests {
 
     @Autowired
-    private UserService userService;
+    private RoleService roleService;
 
     @Autowired
-    private PasswordEncoder passwordEncoder;
+    private MenuService menuService;
+
+    @Autowired
+    private RoleMenuService roleMenuService;
+
+    @Autowired
+    private RoleUserService roleUserService;
 
     @Test
     void contextLoads() {
     }
 
     @Test
-    public void addUser() {
-        User user = new User();
-        user.setUsername("admin");
-        user.setPassword(passwordEncoder.encode("123456"));
-        user.setAddress("湖南省长沙市岳麓区");
-        user.setBirthday(LocalDateTime.of(1987, 5, 5, 16, 22));
-        user.setGender(0);
-        user.setEmail("xxx@qq.com");
-        user.setPhone("17685178016");
-        userService.save(user);
+    public void addRole() {
+        Role role = new Role();
+        role.setName("admin");
+        role.setNameZh("系统管理员");
+        roleService.save(role);
     }
 
     @Test
-    public void checkLogin() {
-        User admin = userService.getOne(new LambdaQueryWrapper<User>().eq(User::getUsername, "admin"));
-        System.out.println(passwordEncoder.matches("123456", admin.getPassword()));
+    public void addMenu() {
+        Menu menu = new Menu();
+        menu.setName("系统角色");
+        menu.setComponent("menu");
+        menu.setAuthority("get:/rui/admin/role/pageList");
+        menuService.save(menu);
     }
 
     @Test
-    public void updateUser() {
-        User admin = userService.getOne(new LambdaQueryWrapper<User>().eq(User::getUsername, "admin"));
-        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-        String encode = bCryptPasswordEncoder.encode("123456");
-        System.out.println(encode);
-        admin.setPassword(encode);
-        // userService.updateById(admin);
+    public void add() {
+        RoleMenu roleMenu = new RoleMenu();
+        roleMenu.setMenuId(1);
+        roleMenu.setRoleId(1);
+        roleMenuService.save(roleMenu);
+        RoleUser roleUser = new RoleUser();
+        roleUser.setRoleId(1);
+        roleUser.setUserId(1);
+        roleUserService.save(roleUser);
     }
+
+    @Test
+    public void jwtTokenTest() {
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime newTime = now.plusHours(2);
+        Map<String, Object> payload = new HashMap<>();
+        // 签发时间
+        payload.put(JWTPayload.ISSUED_AT, now);
+        // 过期时间
+        payload.put(JWTPayload.EXPIRES_AT, newTime);
+        // 生效时间
+        payload.put(JWTPayload.NOT_BEFORE, now);
+        payload.put("userId", 1);
+        String key = "rui";
+        String token = JWTUtil.createToken(payload, key.getBytes(StandardCharsets.UTF_8));
+        System.out.println(token);
+        if (JWTUtil.verify(token, key.getBytes(StandardCharsets.UTF_8))) {
+            JWT jwt = JWTUtil.parseToken(token);
+            Integer userId = (Integer) jwt.getPayload("userId");
+            System.out.println(userId);
+        }
+    }
+
 
 }

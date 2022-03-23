@@ -2,7 +2,7 @@ package com.rui.admin.commons.exception;
 
 /**
  * @author rui
- * @date 2022/2/10 9:22 AM
+ * @since 2022/2/10 9:22 AM
  */
 public class BusinessException extends RuntimeException {
 

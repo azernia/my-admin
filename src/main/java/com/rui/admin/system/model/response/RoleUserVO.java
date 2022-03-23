@@ -3,6 +3,9 @@ package com.rui.admin.system.model.response;
 import lombok.Data;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+
+import java.io.Serializable;
+
 /**
  * 角色用户关联表 VO
  *
@@ -12,16 +15,12 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class RoleUserVO {
+public class RoleUserVO implements Serializable {
 
     /**
      * ID
      */
     private Integer id;
-
-
-
-
 
     /**
      * 角色ID

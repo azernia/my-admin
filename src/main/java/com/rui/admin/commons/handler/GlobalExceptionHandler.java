@@ -4,6 +4,7 @@ import com.rui.admin.commons.constants.RespConstant;
 import com.rui.admin.commons.entity.RespBean;
 import com.rui.admin.commons.exception.BusinessException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -39,6 +40,12 @@ public class GlobalExceptionHandler {
     public RespBean exceptionHandler(Exception e) {
         log.error("============>系统异常:", e);
         return RespBean.fail(RespConstant.ERROR_CODE, "系统异常");
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public RespBean accessDeniedExceptionHandler(AccessDeniedException accessDeniedException) {
+        log.error("============>不允许访问:", accessDeniedException);
+        return RespBean.fail(RespConstant.ERROR_CODE, accessDeniedException.getMessage());
     }
 
 }
