@@ -1,6 +1,6 @@
 package com.rui.admin.config.redis;
 
-import com.alibaba.fastjson.support.spring.FastJsonRedisSerializer;
+import com.rui.admin.commons.serializer.json.FastJsonRedisSerializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
@@ -54,7 +54,7 @@ public class RedisConfig {
     public RedisTemplate<Object, Object> redisTemplate() {
         RedisTemplate<Object, Object> redisTemplate = new RedisTemplate<>();
         // 使用fastJson序列化
-        FastJsonRedisSerializer fastJsonRedisSerializer = new FastJsonRedisSerializer(Object.class);
+        FastJsonRedisSerializer<Object> fastJsonRedisSerializer = new FastJsonRedisSerializer<>(Object.class);
         // value值的序列化采用fastJsonRedisSerializer
         redisTemplate.setValueSerializer(fastJsonRedisSerializer);
         redisTemplate.setHashValueSerializer(fastJsonRedisSerializer);
