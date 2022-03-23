@@ -23,19 +23,19 @@ public interface RoleService extends IService<Role> {
     PageResult<Role> pageList(RoleDTO roleDTO);
 
     /**
-     * 添加角色
-     * @param roleDTO 角色DTO
-     * @return 操作结果
-     */
-    RespBean add(RoleDTO roleDTO);
-
-    /**
      * 列表
      *
      * @param roleDTO 角色dto
      * @return {@link RespBean}
      */
     RespBean list(RoleDTO roleDTO);
+
+    /**
+     * 添加角色
+     * @param roleDTO 角色DTO
+     * @return 操作结果
+     */
+    RespBean add(RoleDTO roleDTO);
 
     /**
      * 编辑
