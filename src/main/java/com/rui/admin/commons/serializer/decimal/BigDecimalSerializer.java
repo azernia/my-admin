@@ -1,4 +1,4 @@
-package com.rui.admin.commons.annotation.serializer.decimal;
+package com.rui.admin.commons.serializer.decimal;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.BeanProperty;

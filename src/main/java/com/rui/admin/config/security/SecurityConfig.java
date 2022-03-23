@@ -7,13 +7,14 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
@@ -50,15 +51,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         auth.userDetailsService(userDetailsService);
     }
 
-    @Override
-    public void configure(WebSecurity web) throws Exception {
-        // 放开 Login
-        web.ignoring().antMatchers("/rui/admin/login");
-    }
+    // @Override
+    // public void configure(WebSecurity web) throws Exception {
+    //     // 放开 Login
+    //     web.ignoring().antMatchers("/rui/admin/login");
+    // }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
+                // 放开登录接口
+                .antMatchers("/rui/admin/login").anonymous()
                 .anyRequest().authenticated()
                 .and()
                 .exceptionHandling()
@@ -66,14 +69,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .accessDeniedHandler(accessDeniedHandler)
                 // 认证失败
                 .authenticationEntryPoint(authenticationEntryPoint)
-                .and()
-                .formLogin()
+                // .and()
+                // .formLogin()
                 // .usernameParameter("username")
                 // .passwordParameter("password")
                 // .loginProcessingUrl("/rui/admin/login")
-                .failureHandler(authenticationFailureHandler)
-                .successHandler(authenticationSuccessHandler)
-                .permitAll()
+                // .failureHandler(authenticationFailureHandler)
+                // .successHandler(authenticationSuccessHandler)
+                // .permitAll()
                 .and()
                 .logout()
                 .logoutSuccessHandler(logoutSuccessHandler)

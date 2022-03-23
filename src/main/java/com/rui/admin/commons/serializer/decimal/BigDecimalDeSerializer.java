@@ -1,4 +1,4 @@
-package com.rui.admin.commons.annotation.serializer.decimal;
+package com.rui.admin.commons.serializer.decimal;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;

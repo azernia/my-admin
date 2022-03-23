@@ -1,7 +1,10 @@
 package com.rui.admin.system.service.impl;
 
+import cn.hutool.core.util.ObjectUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.rui.admin.commons.entity.PageResult;
 import com.rui.admin.commons.entity.RespBean;
+import com.rui.admin.commons.utils.PageUtils;
 import com.rui.admin.system.model.entity.Role;
 import com.rui.admin.system.mapper.RoleMapper;
 import com.rui.admin.system.model.request.RoleDTO;
@@ -20,7 +23,11 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
 
     @Override
     public PageResult<Role> pageList(RoleDTO roleDTO) {
-        return null;
+        LambdaQueryWrapper<Role> queryWrapper = new LambdaQueryWrapper<>();
+        if (ObjectUtil.isNotNull(roleDTO.getName())) {
+            queryWrapper.eq(Role::getName, roleDTO.getName());
+        }
+        return new PageResult<>(page(PageUtils.defaultPage(), queryWrapper));
     }
 
     @Override
