@@ -60,7 +60,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     // @Override
     // public void configure(WebSecurity web) throws Exception {
     //     // 放开 Login
-    //     web.ignoring().antMatchers("/rui/admin/login");
+    //     web.ignoring().antMatchers(
+    //             "/v2/api-docs",
+    //             "/swagger-resources",
+    //             "/swagger-resources/**",
+    //             "/configuration/ui",
+    //             "/configuration/security",
+    //             "/swagger-ui.html/**",
+    //             "/doc.html/**",
+    //             "/webjars/**"
+    //     );
     // }
 
     @Override
@@ -68,6 +77,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 // 放开登录接口
                 .antMatchers("/rui/admin/login").anonymous()
+                .antMatchers("/swagger-ui.html").permitAll()
+                .antMatchers("/doc.html").permitAll()
+                .antMatchers("/webjars/**").permitAll()
+                .antMatchers("/swagger-resources/**").permitAll()
+                .antMatchers("/v2/*").permitAll()
+                .antMatchers("/csrf").permitAll()
+                .antMatchers("/").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .exceptionHandling()
