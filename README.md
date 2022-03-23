@@ -16,3 +16,13 @@
 |                 |       |
 |                 |       |
 
+## 代码提交规范
+
+```txt
+[Bug修复] - content
+[系统构建] - content
+[创建接口] - content
+[代码优化] - content
+[其他提交] - content
+```
+
