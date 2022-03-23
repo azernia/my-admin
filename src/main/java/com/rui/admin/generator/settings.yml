@@ -4,7 +4,7 @@ setting:
   # 去除的表前缀,多个以 , 分隔, 不能有空格
   tablePrefix: sys_
   # 表名多个以 , 分隔, 不能有空格
-  tableName: sys_role_user
+  tableName: sys_role_permissions
   # 模块名
   moduleName: system
   # 包路径
