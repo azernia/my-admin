@@ -31,12 +31,21 @@ module.exports = {
   productionSourceMap: false,
   devServer: {
     port: port,
-    open: true,
+    // 启动后自动打开浏览器
+    // open: true,
     overlay: {
       warnings: false,
       errors: true
     },
-    before: require('./mock/mock-server.js')
+    // 代理
+    proxy: {
+      '/': {
+        ws: false,
+        target: 'http://localhost:8081',
+        // target: 'http://192.168.3.8:8081',
+        pathRewrite: {'^/': ''}
+      }
+    }
   },
   configureWebpack: {
     // provide the app's title in webpack's name field, so that

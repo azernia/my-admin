@@ -16,4 +16,10 @@ public interface LoginService {
      * @return 登录结果
      */
     RespBean doLogin(UserDTO userDTO);
+
+    /**
+     * 退出登录
+     * @return 操作成果
+     */
+    RespBean logout();
 }

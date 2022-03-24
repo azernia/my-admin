@@ -29,11 +29,6 @@ public class UserVO implements Serializable {
     private String username;
 
     /**
-     * 密码
-     */
-    private String password;
-
-    /**
      * 姓名
      */
     private String name;
