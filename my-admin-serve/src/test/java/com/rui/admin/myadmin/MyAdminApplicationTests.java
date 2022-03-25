@@ -4,9 +4,6 @@ import cn.hutool.jwt.JWT;
 import cn.hutool.jwt.JWTPayload;
 import cn.hutool.jwt.JWTUtil;
 import com.rui.admin.system.model.entity.Menu;
-import com.rui.admin.system.model.entity.Role;
-import com.rui.admin.system.model.entity.RoleMenu;
-import com.rui.admin.system.model.entity.RoleUser;
 import com.rui.admin.system.service.MenuService;
 import com.rui.admin.system.service.RoleMenuService;
 import com.rui.admin.system.service.RoleService;
@@ -37,6 +34,12 @@ class MyAdminApplicationTests {
 
     @Test
     void contextLoads() {
+    }
+
+    @Test
+    public void addMenu() {
+        Menu menu = new Menu();
+        menu.setName("根目录");
     }
 
     @Test
