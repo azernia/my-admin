@@ -33,6 +33,11 @@ public class MenuVO implements Serializable {
     private String component;
 
     /**
+     * 组件名称
+     */
+    private String componentName;
+
+    /**
      * 菜单图标
      */
     private String icon;

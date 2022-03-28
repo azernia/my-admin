@@ -1,13 +1,12 @@
 package com.rui.admin.system.model.entity;
 
-import com.rui.admin.commons.entity.BaseEntity;
-import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
-import java.time.LocalDateTime;
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.rui.admin.commons.entity.BaseEntity;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 /**
  * 系统菜单表
@@ -30,15 +29,6 @@ public class Menu extends BaseEntity {
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
-
-
-
-
-
-
-
-
-
     /**
     * 菜单名称
     */
@@ -50,6 +40,10 @@ public class Menu extends BaseEntity {
     */
     private String component;
 
+    /**
+     * 组件名称
+     */
+    private String componentName;
 
     /**
     * 菜单图标
