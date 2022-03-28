@@ -13,6 +13,7 @@ import com.rui.admin.system.model.request.UserDTO;
 import com.rui.admin.system.model.response.UserVO;
 import com.rui.admin.system.service.LoginService;
 import com.rui.admin.system.service.MenuService;
+import com.rui.admin.system.service.RoleUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -20,9 +21,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author rui
@@ -74,9 +73,28 @@ public class LoginServiceImpl implements LoginService {
 
     @Override
     public RespBean sidebarMenus() {
-        LoginUser loginUser = redisCacheUtils.getCacheObject("login:" + UserUtils.getCurrentUserId());
+        Integer userId = UserUtils.getCurrentUserId();
+        LoginUser loginUser = redisCacheUtils.getCacheObject("login:" + userId);
         List<Menu> menus = loginUser.getMenus();
-        return null;
+        // 获取当前用户拥有的菜单
+        List<Integer> menuIds = menuService.getMenuIds(userId);
+        Iterator<Menu> iterator = menus.iterator();
+        // 移除没有关联角色的目录
+        // TODO 后续优化
+        while (iterator.hasNext()) {
+            boolean hasRole = false;
+            Menu next = iterator.next();
+            for (Integer menuId : menuIds) {
+                if (next.getId().equals(menuId)) {
+                    hasRole = true;
+                    break;
+                }
+            }
+            if (!hasRole) {
+                iterator.remove();
+            }
+        }
+        return RespBean.success(handleMenus(menus, -1));
     }
 
     /**
@@ -87,7 +105,19 @@ public class LoginServiceImpl implements LoginService {
      * @return {@link List}<{@link Map}<{@link String}, {@link Object}>>
      */
     private List<Map<String, Object>> handleMenus(List<Menu> menus, Integer parentId) {
-        List<Integer> menuIds = menuService.getMenuIds(UserUtils.getCurrentUserId());
-        return null;
+        // 生成菜单树形
+        List<Map<String, Object>> list = new ArrayList<>();
+        for (Menu menu : menus) {
+            if (menu.getParentId().equals(parentId)) {
+                Map<String, Object> map = new HashMap<>();
+                map.put("name", menu.getName());
+                map.put("component", menu.getComponent());
+                map.put("componentName", menu.getComponentName());
+                map.put("icon", menu.getIcon());
+                map.put("children", handleMenus(menus, menu.getId()));
+                list.add(map);
+            }
+        }
+        return list;
     }
 }

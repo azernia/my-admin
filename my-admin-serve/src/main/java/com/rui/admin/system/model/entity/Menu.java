@@ -65,7 +65,7 @@ public class Menu extends BaseEntity {
     /**
      * 父id
      */
-    private String parentId;
+    private Integer parentId;
 
     /**
      * 树路径

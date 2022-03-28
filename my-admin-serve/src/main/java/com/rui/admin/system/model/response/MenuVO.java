@@ -55,7 +55,7 @@ public class MenuVO implements Serializable {
     /**
      * 父id
      */
-    private String parentId;
+    private Integer parentId;
 
     /**
      * 树路径

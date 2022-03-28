@@ -21,7 +21,7 @@ service.interceptors.request.use(
     }
     if (store.getters.token) {
       // let each request carry token
-      config.headers['token'] = getToken();
+      config.headers['token'] = getToken()
     }
     return config
   },
@@ -40,7 +40,7 @@ service.interceptors.response.use(
       Message({
         message: res.msg,
         type: 'success'
-      });
+      })
     }
     // if the custom code is not 20000, it is judged as an error.
     if (res.code !== 200) {
@@ -48,7 +48,7 @@ service.interceptors.response.use(
         message: res.msg || '系统异常',
         type: 'error',
         duration: 5 * 1000
-      });
+      })
 
       if (res.code === 401) {
         // to re-login
@@ -62,9 +62,9 @@ service.interceptors.response.use(
           })
         })
       }
-      return Promise.reject(new Error(res.msg || 'Error'));
+      return Promise.reject(new Error(res.msg || 'Error'))
     } else {
-      return res;
+      return res
     }
   },
   error => {

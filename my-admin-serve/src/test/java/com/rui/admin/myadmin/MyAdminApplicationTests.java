@@ -44,7 +44,7 @@ class MyAdminApplicationTests {
         menu.setComponentName("Menu");
         menu.setAuthority("get:/rui/admin/menu/list");
         menu.setIcon("tree");
-        menu.setParentId("1");
+        menu.setParentId(1);
         menu.setTreePath("1,2");
         menuService.save(menu);
     }

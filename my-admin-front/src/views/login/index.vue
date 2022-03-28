@@ -57,10 +57,10 @@ export default {
   name: 'Login',
   data() {
     const validateUsername = (rule, value, callback) => {
-      if(value === '' && value.length === 0) {
+      if (value === '' && value.length === 0) {
         callback(new Error('用户名不能为空'))
       } else {
-        callback();
+        callback()
       }
     }
     const validatePassword = (rule, value, callback) => {

@@ -1,5 +1,5 @@
 import defaultSettings from '@/settings'
-import {getMenus} from "@/api/menu";
+import { getMenus } from '@/api/menu'
 
 const { showSettings, fixedHeader, sidebarLogo } = defaultSettings
 
@@ -19,7 +19,7 @@ const mutations = {
   },
 
   INIT_MENU(state, data) {
-    state.menuList = data;
+    state.menuList = data
   }
 }
 
@@ -29,11 +29,11 @@ const actions = {
   },
 
   // 初始化菜单
-  initMenu({commit}) {
+  initMenu({ commit }) {
     getMenus().then(resp => {
-      commit('INIT_MENU', resp.data);
+      commit('INIT_MENU', resp.data)
     }).catch(error => {
-      console.error(error);
+      console.error(error)
     })
   }
 }
