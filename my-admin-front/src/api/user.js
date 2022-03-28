@@ -8,11 +8,10 @@ export function login(data) {
   })
 }
 
-export function getInfo(token) {
+export function getSidebarMenus() {
   return request({
-    url: '/vue-admin-template/user/info',
-    method: 'get',
-    params: { token }
+    url: '/sidebarMenus',
+    method: 'GET'
   })
 }
 

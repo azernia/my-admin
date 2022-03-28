@@ -1,4 +1,4 @@
-import { login, logout } from '@/api/user'
+import { login, logout, getSidebarMenus } from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import { resetRouter } from '@/router'
 
@@ -6,7 +6,8 @@ const getDefaultState = () => {
   return {
     token: getToken(),
     name: '',
-    avatar: ''
+    avatar: '',
+    menus: []
   }
 }
 
@@ -24,6 +25,9 @@ const mutations = {
   },
   SET_AVATAR: (state, avatar) => {
     state.avatar = avatar
+  },
+  INIT_MENU: (state, data) => {
+    state.menus = data
   }
 }
 
@@ -57,6 +61,14 @@ const actions = {
       }).catch(error => {
         reject(error)
       })
+    })
+  },
+
+  initMenu({ commit }) {
+    getSidebarMenus().then(resp => {
+      commit('INIT_MENU', resp.data)
+    }).catch(error => {
+      console.error(error)
     })
   },
 
