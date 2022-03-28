@@ -39,7 +39,14 @@ class MyAdminApplicationTests {
     @Test
     public void addMenu() {
         Menu menu = new Menu();
-        menu.setName("根目录");
+        menu.setName("系统菜单");
+        menu.setComponent("menu");
+        menu.setComponentName("Menu");
+        menu.setAuthority("get:/rui/admin/menu/list");
+        menu.setIcon("tree");
+        menu.setParentId("1");
+        menu.setTreePath("1,2");
+        menuService.save(menu);
     }
 
     @Test

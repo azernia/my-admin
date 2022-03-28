@@ -22,4 +22,11 @@ public interface LoginService {
      * @return 操作成果
      */
     RespBean logout();
+
+    /**
+     * 侧边栏菜单
+     *
+     * @return {@link RespBean}
+     */
+    RespBean sidebarMenus();
 }

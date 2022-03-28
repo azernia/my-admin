@@ -62,4 +62,14 @@ public class Menu extends BaseEntity {
     */
     private String authority;
 
+    /**
+     * 父id
+     */
+    private String parentId;
+
+    /**
+     * 树路径
+     */
+    private String treePath;
+
 }

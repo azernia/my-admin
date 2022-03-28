@@ -51,4 +51,14 @@ public class MenuDTO implements Serializable {
      * 权限标识
      */
     private String authority;
+
+    /**
+     * 父id
+     */
+    private String parentId;
+
+    /**
+     * 树路径
+     */
+    private String treePath;
 }

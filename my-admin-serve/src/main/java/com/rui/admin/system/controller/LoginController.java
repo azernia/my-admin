@@ -35,4 +35,10 @@ public class LoginController {
         return loginService.logout();
     }
 
+    @GetMapping("/sidebarMenus")
+    public RespBean sidebarMenus() {
+        return loginService.sidebarMenus();
+    }
+
+
 }

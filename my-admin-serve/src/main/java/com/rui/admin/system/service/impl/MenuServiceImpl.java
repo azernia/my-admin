@@ -21,4 +21,9 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
     public List<String> getMenuPermissions(Integer userId) {
         return baseMapper.getMenuPermissions(userId);
     }
+
+    @Override
+    public List<Integer> getMenuIds(Integer userId) {
+        return baseMapper.getMenuIds(userId);
+    }
 }

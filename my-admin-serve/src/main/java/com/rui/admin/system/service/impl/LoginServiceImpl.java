@@ -5,11 +5,14 @@ import com.rui.admin.commons.entity.RespBean;
 import com.rui.admin.commons.utils.BeanCopyUtils;
 import com.rui.admin.commons.utils.RedisCacheUtils;
 import com.rui.admin.commons.utils.SecondaryJwtUtils;
+import com.rui.admin.commons.utils.UserUtils;
 import com.rui.admin.config.security.entity.LoginUser;
+import com.rui.admin.system.model.entity.Menu;
 import com.rui.admin.system.model.entity.User;
 import com.rui.admin.system.model.request.UserDTO;
 import com.rui.admin.system.model.response.UserVO;
 import com.rui.admin.system.service.LoginService;
+import com.rui.admin.system.service.MenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -18,6 +21,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -32,6 +36,9 @@ public class LoginServiceImpl implements LoginService {
 
     @Autowired
     private RedisCacheUtils redisCacheUtils;
+
+    @Autowired
+    private MenuService menuService;
 
     @Override
     public RespBean doLogin(UserDTO userDTO) {
@@ -63,5 +70,24 @@ public class LoginServiceImpl implements LoginService {
         // 删除 redis 中的值
         redisCacheUtils.deleteObject("login:"+userId);
         return RespBean.success();
+    }
+
+    @Override
+    public RespBean sidebarMenus() {
+        LoginUser loginUser = redisCacheUtils.getCacheObject("login:" + UserUtils.getCurrentUserId());
+        List<Menu> menus = loginUser.getMenus();
+        return null;
+    }
+
+    /**
+     * 处理菜单
+     *
+     * @param menus    菜单
+     * @param parentId 父id
+     * @return {@link List}<{@link Map}<{@link String}, {@link Object}>>
+     */
+    private List<Map<String, Object>> handleMenus(List<Menu> menus, Integer parentId) {
+        List<Integer> menuIds = menuService.getMenuIds(UserUtils.getCurrentUserId());
+        return null;
     }
 }

@@ -18,4 +18,12 @@ public interface MenuService extends IService<Menu> {
      * @return 菜单权限列表
      */
     List<String> getMenuPermissions(Integer userId);
+
+    /**
+     * 获取菜单ID集合
+     *
+     * @param userId 用户id
+     * @return {@link List}<{@link Integer}>
+     */
+    List<Integer> getMenuIds(Integer userId);
 }

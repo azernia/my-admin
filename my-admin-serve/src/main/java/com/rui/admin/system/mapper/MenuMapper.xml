@@ -10,4 +10,14 @@
          left join sys_menu sm on sm.id = srm.menu_id
         where sru.user_id = #{userId} and sr.enable = true
     </select>
+
+    <select id="getMenuIds" resultType="java.lang.Integer">
+        select
+            sm.id
+        from sys_role_user sru
+                 left join sys_role sr on sr.id = sru.role_id
+                 left join sys_role_menu srm on sru.role_id = srm.role_id
+                 left join sys_menu sm on sm.id = srm.menu_id
+        where sru.user_id = #{userId} and sr.enable = true
+    </select>
 </mapper>
