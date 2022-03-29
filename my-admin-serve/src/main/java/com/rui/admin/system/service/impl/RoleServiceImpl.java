@@ -19,6 +19,8 @@ import com.rui.admin.system.service.RoleService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 /**
 * 系统角色 服务实现类
 *
@@ -81,5 +83,10 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         } else {
             throw new BusinessException(RespConstant.DELETE_FAIL);
         }
+    }
+
+    @Override
+    public List<String> getRoleNameByUserId(Integer userId) {
+        return baseMapper.getRoleNameByUserId(userId);
     }
 }

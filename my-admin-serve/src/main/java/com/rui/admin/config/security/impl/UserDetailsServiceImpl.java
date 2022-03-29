@@ -34,9 +34,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         }
         // 菜单权限列表
         List<String> menuPermissions = menuService.getMenuPermissions(user.getId());
-        List<String> collect = menuPermissions.stream().filter(Objects::nonNull).collect(Collectors.toList());
+        List<String> collect = menuPermissions.stream().filter(Objects::nonNull).filter(ObjectUtil::isNotEmpty).collect(Collectors.toList());
         // 获取所有菜单
-        List<Menu> menus = menuService.list();
+        List<Menu> menus = menuService.list(new LambdaQueryWrapper<Menu>().ne(Menu::getParentId, -1));
         return new LoginUser(user, collect, menus);
     }
 }

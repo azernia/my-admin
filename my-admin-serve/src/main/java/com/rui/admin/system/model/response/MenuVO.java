@@ -28,6 +28,11 @@ public class MenuVO implements Serializable {
     private String name;
 
     /**
+     * 菜单路径
+     */
+    private String path;
+
+    /**
      * 菜单组件
      */
     private String component;
@@ -51,6 +56,11 @@ public class MenuVO implements Serializable {
      * 权限标识
      */
     private String authority;
+
+    /**
+     * 是否为根目录
+     */
+    private Boolean alwaysShow;
 
     /**
      * 父id

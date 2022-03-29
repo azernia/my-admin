@@ -1,5 +1,6 @@
 import { login, logout, getSidebarMenus } from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
+import { setUserInfo, removeUserInfo } from '@/utils/user'
 import { resetRouter } from '@/router'
 
 const getDefaultState = () => {
@@ -43,6 +44,7 @@ const actions = {
         // TODO 头像设置
         // commit('SET_AVATAR', avatar)
         setToken(data.token)
+        setUserInfo(data.userInfo)
         resolve()
       }).catch(error => {
         reject(error)
@@ -55,6 +57,7 @@ const actions = {
     return new Promise((resolve, reject) => {
       logout(state.token).then(() => {
         removeToken() // must remove  token  first
+        removeUserInfo()
         resetRouter()
         commit('RESET_STATE')
         resolve()
@@ -65,10 +68,13 @@ const actions = {
   },
 
   initMenu({ commit }) {
-    getSidebarMenus().then(resp => {
-      commit('INIT_MENU', resp.data)
-    }).catch(error => {
-      console.error(error)
+    return new Promise((resolve, reject) => {
+      getSidebarMenus().then(resp => {
+        commit('INIT_MENU', resp.data)
+        resolve(resp.data)
+      }).catch(error => {
+        reject(error)
+      })
     })
   },
 

@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * 系统用户 VO
@@ -62,4 +63,9 @@ public class UserVO implements Serializable {
      * 是否允许
      */
     private Boolean enable;
+
+    /**
+     * 用户角色列表
+     */
+    private List<String> roles;
 }

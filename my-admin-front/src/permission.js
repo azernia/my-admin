@@ -4,15 +4,12 @@ import { Message } from 'element-ui'
 import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css' // progress bar style
 import { getToken } from '@/utils/auth' // get token from cookie
+import { getUserInfo } from '@/utils/user'
 import getPageTitle from '@/utils/get-page-title'
-import Layout from '@/layout'
-// 获取路由工具
-const _import = require('./router/_import_' + process.env.NODE_ENV)
 
 NProgress.configure({ showSpinner: false }) // NProgress Configuration
 
 const whiteList = ['/login'] // no redirect whitelist
-
 router.beforeEach(async(to, from, next) => {
   // start progress bar
   NProgress.start()
@@ -34,26 +31,21 @@ router.beforeEach(async(to, from, next) => {
       //   next()
       // }
       if (hasGetUserInfo) {
-        await store.dispatch('user/initMenu')
-        console.log(store.getters.menus, 'store.getters.menus')
-        if (store.getters.menus.length === 0) {
-          global.antRouter = []
-          next()
-        }
-        const menus = filterAsyncRouter(store.getters.menus) // 1.过滤路由
-        console.log(menus, 'menus')
-        router.addRoutes(menus) // 2.动态添加路由
-        global.antRouter = menus // 3.将路由数据传递给全局变量，做侧边栏菜单渲染工作
-        next({
-          ...to,
-          replace: true
-        }) // hack方法 确保addRoutes已完成 ,set the replace
+        next()
       } else {
-        // remove token and go to login page to re-login
-        await store.dispatch('user/resetToken')
-        Message.error('请重新登录')
-        next(`/login?redirect=${to.path}`)
-        NProgress.done()
+        try {
+          const userInfo = getUserInfo()
+          console.log(userInfo.roles, 'userInfo')
+          const asyncRoutes = await store.dispatch('permission/generateRoutes')
+          router.addRoutes(asyncRoutes)
+          next({ ...to, replace: true })
+        } catch (error) {
+          // remove token and go to login page to re-login
+          await store.dispatch('user/resetToken')
+          Message.error(error || 'Has Error')
+          next(`/login?redirect=${to.path}`)
+          NProgress.done()
+        }
       }
     }
   } else {
@@ -74,21 +66,3 @@ router.afterEach(() => {
   // finish progress bar
   NProgress.done()
 })
-
-// 遍历后台传来的路由字符串，转换为组件对象
-function filterAsyncRouter(asyncRouterMap) {
-  return asyncRouterMap.filter(route => {
-    console.log(route, 'route')
-    if (route.component) {
-      if (route.component === 'Layout') {
-        route.component = Layout
-      } else {
-        route.component = _import(route.component) // 导入组件
-      }
-    }
-    if (route.children && route.children.length) {
-      route.children = filterAsyncRouter(route.children)
-    }
-    return true
-  })
-}

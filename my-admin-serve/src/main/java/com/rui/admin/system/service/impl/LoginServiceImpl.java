@@ -10,10 +10,12 @@ import com.rui.admin.config.security.entity.LoginUser;
 import com.rui.admin.system.model.entity.Menu;
 import com.rui.admin.system.model.entity.User;
 import com.rui.admin.system.model.request.UserDTO;
+import com.rui.admin.system.model.response.FrontRouteMetaVO;
 import com.rui.admin.system.model.response.UserVO;
 import com.rui.admin.system.service.LoginService;
 import com.rui.admin.system.service.MenuService;
-import com.rui.admin.system.service.RoleUserService;
+import com.rui.admin.system.service.RoleMenuService;
+import com.rui.admin.system.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -39,6 +41,12 @@ public class LoginServiceImpl implements LoginService {
     @Autowired
     private MenuService menuService;
 
+    @Autowired
+    private RoleService roleService;
+
+    @Autowired
+    private RoleMenuService roleMenuService;
+
     @Override
     public RespBean doLogin(UserDTO userDTO) {
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDTO.getUsername(), userDTO.getPassword());
@@ -50,6 +58,7 @@ public class LoginServiceImpl implements LoginService {
         LoginUser loginUser = (LoginUser) authenticate.getPrincipal();
         User user = loginUser.getUser();
         UserVO userVO = BeanCopyUtils.copyBean(user, UserVO.class);
+        userVO.setRoles(roleService.getRoleNameByUserId(user.getId()));
         String jwtToken = SecondaryJwtUtils.createJwtToken(user.getId());
         // 存入 Redis
         redisCacheUtils.setCacheObject("login:"+user.getId(), loginUser);
@@ -57,7 +66,7 @@ public class LoginServiceImpl implements LoginService {
         Map<String, Object> resultMap = new HashMap<>();
         resultMap.put("token", jwtToken);
         resultMap.put("userInfo", userVO);
-        return RespBean.success("登录成功", resultMap);
+        return RespBean.success( "登录成功", resultMap);
     }
 
     @Override
@@ -94,7 +103,7 @@ public class LoginServiceImpl implements LoginService {
                 iterator.remove();
             }
         }
-        return RespBean.success(handleMenus(menus, -1));
+        return RespBean.success(handleMenus(menus, 1));
     }
 
     /**
@@ -110,10 +119,11 @@ public class LoginServiceImpl implements LoginService {
         for (Menu menu : menus) {
             if (menu.getParentId().equals(parentId)) {
                 Map<String, Object> map = new HashMap<>();
-                map.put("name", menu.getName());
+                map.put("path", menu.getPath());
                 map.put("component", menu.getComponent());
-                map.put("componentName", menu.getComponentName());
-                map.put("icon", menu.getIcon());
+                map.put("name", menu.getComponentName());
+                map.put("alwaysShow", menu.getAlwaysShow());
+                map.put("meta", new FrontRouteMetaVO(menu.getName(), menu.getIcon(), roleMenuService.getRoleNameByMenuId(menu.getId())));
                 map.put("children", handleMenus(menus, menu.getId()));
                 list.add(map);
             }

@@ -6,6 +6,8 @@ import com.rui.admin.system.service.RoleMenuService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
 * 角色菜单关联表 服务实现类
 *
@@ -15,4 +17,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class RoleMenuServiceImpl extends ServiceImpl<RoleMenuMapper, RoleMenu> implements RoleMenuService {
 
+    @Override
+    public List<String> getRoleNameByMenuId(Integer menuId) {
+        return baseMapper.getRoleNameByMenuId(menuId);
+    }
 }
