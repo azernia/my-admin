@@ -12,11 +12,4 @@ import java.util.List;
  * @since 2022-03-23
  */
 public interface RoleMenuService extends IService<RoleMenu> {
-    /**
-     * 通过菜单ID获取角色名称
-     *
-     * @param menuId 菜单id
-     * @return {@link List}<{@link String}>
-     */
-    List<String> getRoleNameByMenuId(Integer menuId);
 }

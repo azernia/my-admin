@@ -5,7 +5,7 @@ export function setUserInfo(userInfo) {
 }
 
 export function getUserInfo() {
-  return sessionStorage.getItem(USER_KEY)
+  return JSON.parse(sessionStorage.getItem(USER_KEY))
 }
 
 export function removeUserInfo() {

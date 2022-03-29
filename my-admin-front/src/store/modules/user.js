@@ -1,4 +1,4 @@
-import { login, logout, getSidebarMenus } from '@/api/user'
+import { login, logout, getUserInfo } from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import { setUserInfo, removeUserInfo } from '@/utils/user'
 import { resetRouter } from '@/router'
@@ -8,7 +8,7 @@ const getDefaultState = () => {
     token: getToken(),
     name: '',
     avatar: '',
-    menus: []
+    roles: []
   }
 }
 
@@ -27,8 +27,8 @@ const mutations = {
   SET_AVATAR: (state, avatar) => {
     state.avatar = avatar
   },
-  INIT_MENU: (state, data) => {
-    state.menus = data
+  SET_ROLES: (state, roles) => {
+    state.roles = roles
   }
 }
 
@@ -40,11 +40,7 @@ const actions = {
       login({ username: username.trim(), password: password }).then(response => {
         const { data } = response
         commit('SET_TOKEN', data.token)
-        commit('SET_NAME', data.userInfo.name)
-        // TODO 头像设置
-        // commit('SET_AVATAR', avatar)
         setToken(data.token)
-        setUserInfo(data.userInfo)
         resolve()
       }).catch(error => {
         reject(error)
@@ -67,23 +63,42 @@ const actions = {
     })
   },
 
-  initMenu({ commit }) {
-    return new Promise((resolve, reject) => {
-      getSidebarMenus().then(resp => {
-        commit('INIT_MENU', resp.data)
-        resolve(resp.data)
-      }).catch(error => {
-        reject(error)
-      })
-    })
-  },
-
   // remove token
   resetToken({ commit }) {
     return new Promise(resolve => {
       removeToken() // must remove  token  first
+      removeUserInfo()
       commit('RESET_STATE')
       resolve()
+    })
+  },
+
+  // get user info
+  getInfo({ commit, state }) {
+    return new Promise((resolve, reject) => {
+      getUserInfo(state.token).then(response => {
+        const { data } = response
+
+        if (!data) {
+          reject('请重新登录')
+        }
+
+        const { roles, name } = data
+
+        // roles must be a non-empty array
+        if (!roles || roles.length <= 0) {
+          reject('getInfo: roles must be a non-null array!')
+        }
+
+        commit('SET_ROLES', roles)
+        commit('SET_NAME', name)
+        setUserInfo(JSON.stringify(data))
+        // TODO 头像设置
+        // commit('SET_AVATAR', avatar)
+        resolve(data)
+      }).catch(error => {
+        reject(error)
+      })
     })
   }
 }

@@ -1,8 +1,6 @@
-import { asyncRoutes, constantRoutes } from '@/router'
+import { constantRoutes } from '@/router'
 import { getSidebarMenus } from '@/api/user'
 import Layout from '@/layout'
-// 获取路由工具
-const _import = require('@/router/_import_' + process.env.NODE_ENV)
 
 /**
  * Use meta.role to determine if the current user has permission
@@ -24,16 +22,15 @@ function hasPermission(roles, route) {
  */
 export function filterAsyncRoutes(routes, roles) {
   const res = []
-
   routes.forEach(route => {
-    const tmp = { ...route }
-    if (hasPermission(roles, tmp)) {
+    if (hasPermission(roles, route)) {
+      const tmp = { ...route }
       const component = tmp.component
       if (route.component) {
         if (component === 'Layout') {
           tmp.component = Layout
         } else {
-          tmp.component = _import(tmp.component)
+          tmp.component = (resolve) => require([`@/views${component}`], resolve)
         }
       }
       // 判断是否有下级
@@ -54,6 +51,7 @@ const state = {
 
 const mutations = {
   SET_ROUTES: (state, routes) => {
+    routes.push({ path: '*', redirect: '/404', hidden: true })
     state.addRoutes = routes
     state.routes = constantRoutes.concat(routes)
   }
@@ -67,6 +65,7 @@ const actions = {
         if (resp.code === 200) {
           accessedRoutes = filterAsyncRoutes(resp.data, roles)
         }
+        commit('SET_ROUTES', accessedRoutes)
         resolve(accessedRoutes)
       }).catch(error => {
         reject(error)

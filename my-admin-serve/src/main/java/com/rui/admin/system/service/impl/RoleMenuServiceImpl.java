@@ -17,8 +17,4 @@ import java.util.List;
 @Service
 public class RoleMenuServiceImpl extends ServiceImpl<RoleMenuMapper, RoleMenu> implements RoleMenuService {
 
-    @Override
-    public List<String> getRoleNameByMenuId(Integer menuId) {
-        return baseMapper.getRoleNameByMenuId(menuId);
-    }
 }

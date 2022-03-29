@@ -13,11 +13,5 @@ import java.util.List;
  * @since 2022-03-23
  */
 public interface RoleMenuMapper extends BaseMapper<RoleMenu> {
-    /**
-     * 通过菜单ID获取角色名称
-     *
-     * @param menuId 菜单id
-     * @return {@link List}<{@link String}>
-     */
-    List<String> getRoleNameByMenuId(@Param("menuId") Integer menuId);
+
 }

@@ -84,9 +84,4 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
             throw new BusinessException(RespConstant.DELETE_FAIL);
         }
     }
-
-    @Override
-    public List<String> getRoleNameByUserId(Integer userId) {
-        return baseMapper.getRoleNameByUserId(userId);
-    }
 }

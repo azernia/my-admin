@@ -27,4 +27,12 @@ public interface MenuMapper extends BaseMapper<Menu> {
      * @return {@link List}<{@link Integer}>
      */
     List<Integer> getMenuIds(@Param("userId") Integer userId);
+
+    /**
+     * 通过菜单ID获取菜单权限
+     *
+     * @param menuId 菜单id
+     * @return {@link String}
+     */
+    String getMenuPermissionByMenuId(@Param("menuId") Integer menuId);
 }

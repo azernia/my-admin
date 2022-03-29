@@ -13,11 +13,4 @@ import java.util.List;
  * @since 2022-03-22
  */
 public interface RoleMapper extends BaseMapper<Role> {
-    /**
-     * 通过用户ID获取角色名称
-     *
-     * @param userId 用户id
-     * @return {@link List}<{@link String}>
-     */
-    List<String> getRoleNameByUserId(@Param("userId") Integer userId);
 }

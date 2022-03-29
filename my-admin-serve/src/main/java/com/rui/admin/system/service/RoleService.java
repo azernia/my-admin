@@ -54,12 +54,4 @@ public interface RoleService extends IService<Role> {
      * @return {@link RespBean}
      */
     RespBean delete(Integer id);
-
-    /**
-     * 通过用户ID获取角色名称
-     *
-     * @param userId 用户id
-     * @return {@link List}<{@link String}>
-     */
-    List<String> getRoleNameByUserId(Integer userId);
 }

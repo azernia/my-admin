@@ -15,6 +15,13 @@ export function getSidebarMenus() {
   })
 }
 
+export function getUserInfo() {
+  return request({
+    url: '/getUserInfo',
+    method: 'GET'
+  })
+}
+
 export function logout() {
   return request({
     url: '/logout',

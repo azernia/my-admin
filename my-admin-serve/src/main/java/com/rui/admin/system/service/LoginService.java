@@ -29,4 +29,11 @@ public interface LoginService {
      * @return {@link RespBean}
      */
     RespBean sidebarMenus();
+
+    /**
+     * 获取用户信息
+     *
+     * @return {@link RespBean}
+     */
+    RespBean getUserInfo();
 }

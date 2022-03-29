@@ -2,6 +2,7 @@ package com.rui.admin.system.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.rui.admin.system.model.entity.Menu;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -26,4 +27,12 @@ public interface MenuService extends IService<Menu> {
      * @return {@link List}<{@link Integer}>
      */
     List<Integer> getMenuIds(Integer userId);
+
+    /**
+     * 通过菜单ID获取菜单权限
+     *
+     * @param menuId 菜单id
+     * @return {@link String}
+     */
+    String getMenuPermissionByMenuId(Integer menuId);
 }
