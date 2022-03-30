@@ -2,6 +2,7 @@ package com.rui.admin.commons.filter.jwt;
 
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.jwt.JWTUtil;
+import com.rui.admin.commons.constants.RedisConstant;
 import com.rui.admin.commons.exception.BusinessException;
 import com.rui.admin.commons.utils.RedisCacheUtils;
 import com.rui.admin.commons.utils.SecondaryJwtUtils;
@@ -46,7 +47,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
             log.info("==========>token 非法");
             throw new BusinessException("token 非法");
         }
-        LoginUser loginUser = redisCacheUtils.getCacheObject("login:" + userId);
+        LoginUser loginUser = redisCacheUtils.getCacheObject(RedisConstant.LOGIN + userId);
         if (ObjectUtil.isNull(loginUser)) {
             log.info("==========>用户尚未登录");
             throw new BusinessException("用户尚未登录");

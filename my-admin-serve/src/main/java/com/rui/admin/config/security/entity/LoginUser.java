@@ -2,7 +2,6 @@ package com.rui.admin.config.security.entity;
 
 import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.fastjson.annotation.JSONField;
-import com.rui.admin.system.model.entity.Menu;
 import com.rui.admin.system.model.entity.User;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,15 +21,12 @@ public class LoginUser implements UserDetails {
 
     private List<String> permissions;
 
-    private List<Menu> menus;
-
     @JSONField(serialize = false)
     private List<SimpleGrantedAuthority> authorities;
 
-    public LoginUser(User user, List<String> permissions, List<Menu> menus) {
+    public LoginUser(User user, List<String> permissions) {
         this.user = user;
         this.permissions = permissions;
-        this.menus = menus;
     }
 
     @Override

@@ -3,7 +3,6 @@ package com.rui.admin.config.security.impl;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.rui.admin.config.security.entity.LoginUser;
-import com.rui.admin.system.model.entity.Menu;
 import com.rui.admin.system.model.entity.User;
 import com.rui.admin.system.service.MenuService;
 import com.rui.admin.system.service.UserService;
@@ -35,8 +34,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         // 菜单权限列表
         List<String> menuPermissions = menuService.getMenuPermissions(user.getId());
         List<String> collect = menuPermissions.stream().filter(Objects::nonNull).filter(ObjectUtil::isNotEmpty).collect(Collectors.toList());
-        // 获取所有菜单
-        List<Menu> menus = menuService.list(new LambdaQueryWrapper<Menu>().ne(Menu::getParentId, -1));
-        return new LoginUser(user, collect, menus);
+        return new LoginUser(user, collect);
     }
 }

@@ -31,6 +31,7 @@ public class RedisConfig {
         // 建议使用这种方式，小范围指定白名单，需要序列化的类
         ParserConfig globalInstance = ParserConfig.getGlobalInstance();
         globalInstance.addAccept("com.rui.admin.config.security.entity");
+        globalInstance.addAccept("com.rui.admin.system.model.entity");
         // key的序列化采用StringRedisSerializer
         redisTemplate.setKeySerializer(new StringRedisSerializer());
         redisTemplate.setHashKeySerializer(new StringRedisSerializer());

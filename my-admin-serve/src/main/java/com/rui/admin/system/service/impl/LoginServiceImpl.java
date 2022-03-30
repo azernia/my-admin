@@ -1,6 +1,8 @@
 package com.rui.admin.system.service.impl;
 
 import cn.hutool.core.util.ObjectUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.rui.admin.commons.constants.RedisConstant;
 import com.rui.admin.commons.entity.RespBean;
 import com.rui.admin.commons.utils.BeanCopyUtils;
 import com.rui.admin.commons.utils.RedisCacheUtils;
@@ -12,7 +14,8 @@ import com.rui.admin.system.model.entity.User;
 import com.rui.admin.system.model.request.UserDTO;
 import com.rui.admin.system.model.response.FrontRouteMetaVO;
 import com.rui.admin.system.model.response.UserVO;
-import com.rui.admin.system.service.*;
+import com.rui.admin.system.service.LoginService;
+import com.rui.admin.system.service.MenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -50,8 +53,13 @@ public class LoginServiceImpl implements LoginService {
         LoginUser loginUser = (LoginUser) authenticate.getPrincipal();
         User user = loginUser.getUser();
         String jwtToken = SecondaryJwtUtils.createJwtToken(user.getId());
+        // 获取所有菜单
+        List<Menu> menus = menuService.list(new LambdaQueryWrapper<Menu>().ne(Menu::getParentId, -1));
         // 存入 Redis
-        redisCacheUtils.setCacheObject("login:"+user.getId(), loginUser);
+        redisCacheUtils.setCacheObject(RedisConstant.LOGIN + user.getId(), loginUser);
+        // 清空 Redis 菜单缓存
+        redisCacheUtils.deleteObject(RedisConstant.LOGIN_MENU);
+        redisCacheUtils.setCacheList(RedisConstant.LOGIN_MENU, menus);
         // 返回 Map
         Map<String, Object> resultMap = new HashMap<>();
         resultMap.put("token", jwtToken);
@@ -65,17 +73,17 @@ public class LoginServiceImpl implements LoginService {
         LoginUser loginUser = (LoginUser) authentication.getPrincipal();
         Integer userId = loginUser.getUser().getId();
         // 删除 redis 中的值
-        redisCacheUtils.deleteObject("login:"+userId);
+        redisCacheUtils.deleteObject(RedisConstant.LOGIN + userId);
+        // 删除 Redis 菜单数据
+        redisCacheUtils.deleteObject(RedisConstant.LOGIN_MENU);
         return RespBean.success();
     }
 
     @Override
     public RespBean sidebarMenus() {
-        Integer userId = UserUtils.getCurrentUserId();
-        LoginUser loginUser = redisCacheUtils.getCacheObject("login:" + userId);
-        List<Menu> menus = loginUser.getMenus();
+        List<Menu> menus = redisCacheUtils.getCacheList(RedisConstant.LOGIN_MENU);
         // 获取当前用户拥有的菜单
-        List<Integer> menuIds = menuService.getMenuIds(userId);
+        List<Integer> menuIds = menuService.getMenuIds(UserUtils.getCurrentUserId());
         Iterator<Menu> iterator = menus.iterator();
         // 移除没有关联角色的目录
         // TODO 后续优化
@@ -97,7 +105,7 @@ public class LoginServiceImpl implements LoginService {
 
     @Override
     public RespBean getUserInfo() {
-        LoginUser loginUser = redisCacheUtils.getCacheObject("login:" + UserUtils.getCurrentUserId());
+        LoginUser loginUser = redisCacheUtils.getCacheObject(RedisConstant.LOGIN + UserUtils.getCurrentUserId());
         User user = loginUser.getUser();
         UserVO userVO = BeanCopyUtils.copyBean(user, UserVO.class);
         List<String> menuPermissions = menuService.getMenuPermissions(user.getId()).stream().filter(Objects::nonNull).filter(ObjectUtil::isNotEmpty).collect(Collectors.toList());

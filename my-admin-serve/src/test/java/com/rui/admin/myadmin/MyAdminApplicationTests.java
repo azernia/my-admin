@@ -5,12 +5,10 @@ import cn.hutool.jwt.JWTPayload;
 import cn.hutool.jwt.JWTUtil;
 import com.rui.admin.system.model.entity.Menu;
 import com.rui.admin.system.service.MenuService;
-import com.rui.admin.system.service.RoleMenuService;
-import com.rui.admin.system.service.RoleService;
-import com.rui.admin.system.service.RoleUserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.redis.core.RedisTemplate;
 
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
@@ -21,19 +19,19 @@ import java.util.Map;
 class MyAdminApplicationTests {
 
     @Autowired
-    private RoleService roleService;
-
-    @Autowired
     private MenuService menuService;
 
     @Autowired
-    private RoleMenuService roleMenuService;
-
-    @Autowired
-    private RoleUserService roleUserService;
+    private RedisTemplate redisTemplate;
 
     @Test
     void contextLoads() {
+    }
+
+    @Test
+    public void redisTest() {
+        Boolean delete = redisTemplate.delete("login:menus");
+        System.out.println(delete);
     }
 
     @Test
