@@ -1,8 +1,9 @@
 package com.rui.admin.system.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.rui.admin.commons.entity.RespBean;
 import com.rui.admin.system.model.entity.Menu;
-import org.apache.ibatis.annotations.Param;
+import com.rui.admin.system.model.request.MenuDTO;
 
 import java.util.List;
 
@@ -35,4 +36,19 @@ public interface MenuService extends IService<Menu> {
      * @return {@link String}
      */
     String getMenuPermissionByMenuId(Integer menuId);
+
+    /**
+     * 菜单列表
+     *
+     * @return {@link RespBean}
+     */
+    RespBean menuList();
+
+    /**
+     * 添加
+     *
+     * @param menuDTO 菜单dto
+     * @return {@link RespBean}
+     */
+    RespBean add(MenuDTO menuDTO);
 }
