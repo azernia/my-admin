@@ -1,6 +1,8 @@
 import { constantRoutes } from '@/router'
 import { getSidebarMenus } from '@/api/user'
 import Layout from '@/layout'
+// 获取组件
+const _import = require('@/router/_import_' + process.env.NODE_ENV)
 
 /**
  * Use meta.role to determine if the current user has permission
@@ -30,7 +32,8 @@ export function filterAsyncRoutes(routes, roles) {
         if (component === 'Layout') {
           tmp.component = Layout
         } else {
-          tmp.component = (resolve) => require([`@/views${component}`], resolve)
+          // tmp.component = (resolve) => require([`@/views${component}`], resolve)
+          tmp.component = _import(component)
         }
       }
       // 判断是否有下级
