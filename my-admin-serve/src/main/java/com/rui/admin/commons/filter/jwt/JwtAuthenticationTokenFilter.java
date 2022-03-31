@@ -1,7 +1,9 @@
 package com.rui.admin.commons.filter.jwt;
 
+import cn.hutool.core.exceptions.ValidateException;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.jwt.JWTUtil;
+import cn.hutool.jwt.JWTValidator;
 import com.rui.admin.commons.constants.RedisConstant;
 import com.rui.admin.commons.exception.BusinessException;
 import com.rui.admin.commons.utils.RedisCacheUtils;
@@ -41,8 +43,16 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
             return;
         }
         Integer userId;
+        // 判断 Token 是否合法
         if (JWTUtil.verify(token, SecondaryJwtUtils.KEY.getBytes(StandardCharsets.UTF_8))) {
-            userId = (Integer) JWTUtil.parseToken(token).getPayload("userId");
+            try {
+                // 验证 token 是否过期
+                JWTValidator.of(token).validateDate();
+                userId = (Integer) JWTUtil.parseToken(token).getPayload("userId");
+            } catch (ValidateException e) {
+                log.info("==========> token 已过期:", e);
+                throw new BusinessException("token 已过期");
+            }
         } else {
             log.info("==========>token 非法");
             throw new BusinessException("token 非法");

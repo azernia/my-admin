@@ -20,7 +20,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -68,12 +67,8 @@ public class LoginServiceImpl implements LoginService {
 
     @Override
     public RespBean logout() {
-        // 获取 SecurityContextHolder 中的用户信息
-        UsernamePasswordAuthenticationToken authentication = (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
-        LoginUser loginUser = (LoginUser) authentication.getPrincipal();
-        Integer userId = loginUser.getUser().getId();
         // 删除 redis 中的值
-        redisCacheUtils.deleteObject(RedisConstant.LOGIN + userId);
+        redisCacheUtils.deleteObject(RedisConstant.LOGIN + UserUtils.getCurrentUserId());
         // 删除 Redis 菜单数据
         redisCacheUtils.deleteObject(RedisConstant.LOGIN_MENU);
         return RespBean.success();

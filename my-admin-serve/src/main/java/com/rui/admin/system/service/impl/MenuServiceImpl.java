@@ -80,6 +80,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
                 map.put("path", menu.getPath());
                 map.put("alwaysShow", menu.getAlwaysShow());
                 map.put("authority", menu.getAuthority());
+                map.put("hidden", menu.getHidden());
                 map.put("children", handleMenuList(menus, menu.getId()));
                 list.add(map);
             }

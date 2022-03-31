@@ -8,6 +8,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
  * @since 2022/3/1 3:44 PM
  */
 public class UserUtils {
+
+    private UserUtils() {}
+
     /**
      * 获取当前登录用户ID
      * @return 用户ID
