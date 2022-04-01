@@ -66,4 +66,9 @@ public class MenuVO implements Serializable {
      * 父id
      */
     private Integer parentId;
+
+    /**
+     * 父菜单名称
+     */
+    private String parentName;
 }

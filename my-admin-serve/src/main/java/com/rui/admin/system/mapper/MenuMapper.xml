@@ -24,4 +24,11 @@
     <select id="getMenuPermissionByMenuId" resultType="java.lang.String">
         select authority from sys_menu where id = #{menuId}
     </select>
+
+    <select id="menuList" resultType="com.rui.admin.system.model.response.MenuVO">
+        select
+        sm.*,
+        (select sm2.name from sys_menu sm2 where sm2.id = sm.parent_id) as parentName
+        from sys_menu sm
+    </select>
 </mapper>

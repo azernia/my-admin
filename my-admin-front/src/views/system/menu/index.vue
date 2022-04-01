@@ -3,12 +3,28 @@
     <!-- 添加菜单 -->
     <div class="op-container">
       <el-button type="primary" @click="addFormOpen = true">添加菜单</el-button>
-      <el-dialog title="添加菜单" :visible.sync="addFormOpen">
-        <el-form v-loading="loading" :model="menuForm" label-width="100px">
+      <el-dialog title="添加菜单" :visible.sync="addFormOpen" @close="resetMenuForm">
+        <el-form ref="addForm" :model="menuForm" label-width="100px">
           <el-row :gutter="20">
             <el-col :span="12">
               <el-form-item label="父级菜单" required>
-                <el-input v-model="menuForm.parentId" placeholder="请选择父级菜单" />
+                <el-popover
+                  ref="popoverRef"
+                  placement="bottom"
+                  width="400"
+                  trigger="click"
+                >
+                  <el-tree
+                    ref="menuTree"
+                    node-key="id"
+                    :check-strictly="true"
+                    :data="tableData"
+                    :props="treeProps"
+                    :show-checkbox="true"
+                    @check-change="setParentMenu"
+                  />
+                  <el-input slot="reference" v-model="menuForm.parentName" placeholder="请选择父级菜单" readonly />
+                </el-popover>
               </el-form-item>
             </el-col>
             <el-col :span="12">
@@ -79,12 +95,13 @@
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button @click="addFormOpen = false">取 消</el-button>
-          <el-button type="primary" @click="addFormOpen = false">确 定</el-button>
+          <el-button type="primary" @click="add">确 定</el-button>
         </div>
       </el-dialog>
     </div>
     <!-- 菜单树形表格 -->
     <el-table
+      v-loading="loading"
       :data="tableData"
       style="width: 100%"
       row-key="id"
@@ -94,33 +111,28 @@
       <el-table-column
         prop="name"
         label="菜单名称"
-        width="180"
       />
       <el-table-column
         prop="path"
         label="菜单路径"
         align="center"
-        width="180"
       />
       <el-table-column
         prop="component"
         label="菜单组件"
         align="center"
-        width="180"
       />
       <el-table-column
         prop="componentName"
         label="组件名称"
         align="center"
-        width="120"
       />
       <el-table-column
         prop="icon"
         label="菜单图标"
         align="center"
-        width="50"
       >
-        <template slot-scope="scope">
+        <template v-slot="scope">
           <svg-icon v-if="scope.row.icon && scope.row.icon.substr(0, 2) !== 'el'" :icon-class="scope.row.icon" />
           <i v-else-if="scope.row.icon" :class="scope.row.icon" />
         </template>
@@ -129,22 +141,44 @@
         prop="hidden"
         label="是否隐藏"
         align="center"
-        width="80"
-      />
+      >
+        <template v-slot="scope">
+          <el-tag :type="scope.row.hidden ? 'warning' : 'success'">
+            {{ scope.row.hidden ? '隐藏' : '显示' }}
+          </el-tag>
+        </template>
+      </el-table-column>
       <el-table-column
         prop="alwaysShow"
         label="一直显示"
         align="center"
-        width="80"
-      />
+      >
+        <template v-slot="scope">
+          <el-tag :type="scope.row.alwaysShow ? 'warning' : 'success'">
+            {{ scope.row.alwaysShow ? '否' : '是' }}
+          </el-tag>
+        </template>
+      </el-table-column>
       <el-table-column
         prop="authority"
         label="权限标识"
         align="center"
       />
+      <el-table-column
+        label="操作"
+        align="center"
+        width="180"
+      >
+        <template v-slot="scope">
+          <el-button type="warning" size="small" @click="showEditForm(scope.row)">编辑</el-button>
+          <el-button type="danger" size="small">删除</el-button>
+        </template>
+      </el-table-column>
     </el-table>
+    <!-- 菜单图标 -->
     <div>
       <el-drawer
+        ref="iconDrawer"
         :visible.sync="iconDrawer"
         direction="rtl"
         :show-close="false"
@@ -153,7 +187,7 @@
         <el-tabs type="border-card" class="icon-tabs">
           <el-tab-pane label="自定义图标" style="overflow: auto">
             <div class="grid">
-              <div v-for="item of svgIcons" :key="item" @click="handleClipboard(generateIconCode(item),$event)">
+              <div v-for="item of svgIcons" :key="item" @click="setMenuIcon(item, true)">
                 <el-tooltip placement="top">
                   <div slot="content">
                     {{ generateIconCode(item) }}
@@ -168,7 +202,7 @@
           </el-tab-pane>
           <el-tab-pane label="Element-UI 图标">
             <div class="grid">
-              <div v-for="item of elementIcons" :key="item" @click="handleClipboard(generateElementIconCode(item),$event)">
+              <div v-for="item of elementIcons" :key="item" @click="setMenuIcon(item, false)">
                 <el-tooltip placement="top">
                   <div slot="content">
                     {{ generateElementIconCode(item) }}
@@ -184,13 +218,120 @@
         </el-tabs>
       </el-drawer>
     </div>
+    <!-- 修改菜单 -->
+    <div>
+      <el-dialog title="修改菜单" :visible.sync="editFormOpen" @close="resetMenuForm">
+        <el-form ref="editForm" :model="menuForm" label-width="100px">
+          <el-row :gutter="20">
+            <el-col :span="12">
+              <el-form-item label="父级菜单" required>
+                <el-popover
+                  ref="popoverRef"
+                  placement="bottom"
+                  width="400"
+                  trigger="click"
+                  :disabled="menuForm.parentId === -1"
+                >
+                  <el-tree
+                    ref="menuTree"
+                    node-key="id"
+                    :check-strictly="true"
+                    :data="tableData"
+                    :props="treeProps"
+                    :show-checkbox="true"
+                    :default-expanded-keys="[checkedKey]"
+                    :default-checked-keys="[checkedKey]"
+                    @check-change="setParentMenu"
+                    @show="initTreePopover"
+                  />
+                  <el-input
+                    slot="reference"
+                    v-model="menuForm.parentName"
+                    :placeholder="menuForm.parentId === -1 ? '顶级目录(不可修改)' : '请选择父级菜单'"
+                    readonly
+                    :disabled="menuForm.parentId === -1"
+                  />
+                </el-popover>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="菜单名称" required>
+                <el-input v-model="menuForm.name" placeholder="请输入菜单名称" />
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row :gutter="20">
+            <el-col :span="12">
+              <el-form-item label="菜单路由" required>
+                <el-input v-model="menuForm.path" placeholder="请输入菜单路由" />
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="菜单组件" required>
+                <el-input v-model="menuForm.component" placeholder="请输入菜单组件" />
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row :gutter="20">
+            <el-col :span="12">
+              <el-form-item label="组件名称" required>
+                <el-input v-model="menuForm.componentName" placeholder="请输入组件名称" />
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="菜单图标">
+                <el-input v-model="menuForm.icon" placeholder="请输入菜单名称" readonly @click.native="iconDrawer = true" />
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row :gutter="20">
+            <el-col :span="12">
+              <el-form-item label="是否隐藏">
+                <el-switch
+                  v-model="menuForm.hidden"
+                  style="display: block"
+                  active-color="#13ce66"
+                  inactive-color="#ff4949"
+                  active-text="是"
+                  inactive-text="否"
+                  class="switch-item"
+                />
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="一直显示">
+                <el-switch
+                  v-model="menuForm.alwaysShow"
+                  style="display: block"
+                  active-color="#13ce66"
+                  inactive-color="#ff4949"
+                  active-text="是"
+                  inactive-text="否"
+                  class="switch-item"
+                />
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col>
+              <el-form-item label="权限标识" required>
+                <el-input v-model="menuForm.authority" placeholder="请输入权限标识" />
+              </el-form-item>
+            </el-col>
+          </el-row>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="editFormOpen = false">取 消</el-button>
+          <el-button type="primary" @click="editFormOpen = false">确 定</el-button>
+        </div>
+      </el-dialog>
+    </div>
   </div>
 </template>
 
 <script>
-import { getMenus } from '@/api/menu'
+import { getMenus, add } from '@/api/menu'
 // 菜单图标
-import clipboard from '@/utils/clipboard'
 import svgIcons from '@/assets/icons/svg-icons'
 import elementIcons from '@/assets/icons/element-icons'
 
@@ -199,10 +340,16 @@ export default {
   data() {
     return {
       addFormOpen: false,
+      editFormOpen: false,
       loading: false,
       iconDrawer: false,
+      checkedKey: '',
       svgIcons,
       elementIcons,
+      treeProps: {
+        children: 'children',
+        label: 'name'
+      },
       menuForm: {
         // 菜单名称
         name: '',
@@ -221,7 +368,9 @@ export default {
         // 是否一直显示（根目录）
         alwaysShow: true,
         // 父ID
-        parentId: ''
+        parentId: '',
+        // 父级菜单名称
+        parentName: ''
       },
       tableData: []
     }
@@ -238,21 +387,91 @@ export default {
           this.tableData = resp.data
           this.loading = false
         }
-        console.log(resp, 'resp')
       } catch (e) {
         console.error(e)
       } finally {
         this.loading = false
       }
     },
+    // 重置表单
+    resetMenuForm() {
+      this.menuForm = {
+        // 菜单名称
+        name: '',
+        // 菜单路径
+        path: '',
+        // 菜单组件
+        component: '',
+        // 组件名称
+        componentName: '',
+        // 菜单图标,
+        icon: '',
+        // 是否隐藏
+        hidden: false,
+        // 权限标识
+        authority: '',
+        // 是否一直显示（根目录）
+        alwaysShow: true,
+        // 父ID
+        parentId: '',
+        // 父级菜单名称
+        parentName: ''
+      }
+      this.checkedKey = ''
+    },
+    // 设置父级菜单
+    setParentMenu(data, isChecked) {
+      if (isChecked) {
+        // 设置单选
+        this.$refs.menuTree.setCheckedNodes([])
+        this.$refs.menuTree.setCheckedNodes([data])
+        this.menuForm.parentId = data.id
+        this.menuForm.parentName = data.name
+        // 手动关闭
+        // this.$refs.popoverRef.doClose()
+      }
+    },
+    // 初始化弹出框默认选中
+    initTreePopover() {
+      if (this.menuForm.parentId) {
+        this.checkedKey = this.menuForm.parentId
+      }
+    },
+    // 基础操作
+    add() {
+      console.log(this.menuForm)
+      add(this.menuForm).then(resp => {
+        if (resp.code === 200) {
+          this.initMenuTree()
+        }
+      }).catch(error => {
+        console.error(error)
+      }).finally(() => {
+        this.addFormOpen = false
+      })
+    },
+    edit() {
+    },
+    showEditForm(data) {
+      Object.assign(this.menuForm, data)
+      this.editFormOpen = true
+    },
+    delete() {
+    },
+    // 菜单图标相关方法
     generateIconCode(symbol) {
       return `<svg-icon icon-class="${symbol}" />`
     },
     generateElementIconCode(symbol) {
       return `<i class="el-icon-${symbol}" />`
     },
-    handleClipboard(text, event) {
-      clipboard(text, event)
+    setMenuIcon(symbol, flag) {
+      if (flag) {
+        this.menuForm.icon = symbol
+      } else {
+        this.menuForm.icon = `el-icon-${symbol}`
+      }
+      this.$refs.iconDrawer.closeDrawer()
     }
   }
 }

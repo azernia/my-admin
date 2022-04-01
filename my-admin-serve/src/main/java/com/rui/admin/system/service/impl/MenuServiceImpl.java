@@ -1,14 +1,18 @@
 package com.rui.admin.system.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.rui.admin.commons.constants.RedisConstant;
 import com.rui.admin.commons.constants.RespConstant;
 import com.rui.admin.commons.entity.RespBean;
 import com.rui.admin.commons.exception.BusinessException;
 import com.rui.admin.commons.utils.BeanCopyUtils;
+import com.rui.admin.commons.utils.RedisCacheUtils;
 import com.rui.admin.system.mapper.MenuMapper;
 import com.rui.admin.system.model.entity.Menu;
 import com.rui.admin.system.model.request.MenuDTO;
+import com.rui.admin.system.model.response.MenuVO;
 import com.rui.admin.system.service.MenuService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +29,9 @@ import java.util.Map;
 */
 @Service
 public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements MenuService {
+
+    @Autowired
+    private RedisCacheUtils redisCacheUtils;
 
     @Override
     public List<String> getMenuPermissions(Integer userId) {
@@ -43,7 +50,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
 
     @Override
     public RespBean menuList() {
-        List<Menu> menus = list();
+        List<MenuVO> menus = baseMapper.menuList();
         return RespBean.success(handleMenuList(menus, -1));
     }
 
@@ -52,6 +59,8 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
     public RespBean add(MenuDTO menuDTO) {
         Menu menu = BeanCopyUtils.copyBean(menuDTO, Menu.class);
         if (save(menu)) {
+            redisCacheUtils.deleteObject(RedisConstant.LOGIN_MENU);
+            redisCacheUtils.setCacheList(RedisConstant.LOGIN_MENU, list());
             return RespBean.success(RespConstant.ADD_SUCCESS);
         } else {
             throw new BusinessException(RespConstant.ADD_FAIL);
@@ -65,10 +74,10 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
      * @param parentId 父id
      * @return {@link List}<{@link Map}<{@link String}, {@link Object}>>
      */
-    private List<Map<String, Object>> handleMenuList(List<Menu> menus, Integer parentId) {
+    private List<Map<String, Object>> handleMenuList(List<MenuVO> menus, Integer parentId) {
         // 生成菜单树形
         List<Map<String, Object>> list = new ArrayList<>();
-        for (Menu menu : menus) {
+        for (MenuVO menu : menus) {
             if (menu.getParentId().equals(parentId)) {
                 Map<String, Object> map = new HashMap<>();
                 map.put("id", menu.getId());
@@ -77,6 +86,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
                 map.put("componentName", menu.getComponentName());
                 map.put("icon", menu.getIcon());
                 map.put("parentId", menu.getParentId());
+                map.put("parentName", menu.getParentName());
                 map.put("path", menu.getPath());
                 map.put("alwaysShow", menu.getAlwaysShow());
                 map.put("authority", menu.getAuthority());

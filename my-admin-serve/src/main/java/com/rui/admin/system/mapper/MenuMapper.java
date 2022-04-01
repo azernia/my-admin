@@ -2,6 +2,7 @@ package com.rui.admin.system.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.rui.admin.system.model.entity.Menu;
+import com.rui.admin.system.model.response.MenuVO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -35,4 +36,11 @@ public interface MenuMapper extends BaseMapper<Menu> {
      * @return {@link String}
      */
     String getMenuPermissionByMenuId(@Param("menuId") Integer menuId);
+
+    /**
+     * 菜单列表
+     *
+     * @return {@link List}<{@link MenuVO}>
+     */
+    List<MenuVO> menuList();
 }
