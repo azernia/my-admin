@@ -4,10 +4,10 @@
     <div class="op-container">
       <el-button type="primary" @click="addFormOpen = true">添加菜单</el-button>
       <el-dialog title="添加菜单" :visible.sync="addFormOpen" @close="resetMenuForm">
-        <el-form ref="addForm" :model="menuForm" label-width="100px">
+        <el-form ref="addForm" :model="menuForm" :rules="rules" label-width="100px">
           <el-row :gutter="20">
             <el-col :span="12">
-              <el-form-item label="父级菜单" required>
+              <el-form-item label="父级菜单" prop="parentId" required>
                 <el-popover
                   ref="popoverRef"
                   placement="bottom"
@@ -28,32 +28,32 @@
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item label="菜单名称" required>
+              <el-form-item label="菜单名称" prop="name" required>
                 <el-input v-model="menuForm.name" placeholder="请输入菜单名称" />
               </el-form-item>
             </el-col>
           </el-row>
           <el-row :gutter="20">
             <el-col :span="12">
-              <el-form-item label="菜单路由" required>
+              <el-form-item label="菜单路由" prop="path" required>
                 <el-input v-model="menuForm.path" placeholder="请输入菜单路由" />
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item label="菜单组件" required>
+              <el-form-item label="菜单组件" prop="component" required>
                 <el-input v-model="menuForm.component" placeholder="请输入菜单组件" />
               </el-form-item>
             </el-col>
           </el-row>
           <el-row :gutter="20">
             <el-col :span="12">
-              <el-form-item label="组件名称" required>
+              <el-form-item label="组件名称" prop="componentName" required>
                 <el-input v-model="menuForm.componentName" placeholder="请输入组件名称" />
               </el-form-item>
             </el-col>
             <el-col :span="12">
               <el-form-item label="菜单图标">
-                <el-input v-model="menuForm.icon" placeholder="请输入菜单名称" readonly @click.native="iconDrawer = true" />
+                <el-input v-model="menuForm.icon" prop="icon" placeholder="请输入菜单名称" readonly @click.native="iconDrawer = true" />
               </el-form-item>
             </el-col>
           </el-row>
@@ -85,10 +85,15 @@
               </el-form-item>
             </el-col>
           </el-row>
-          <el-row>
-            <el-col>
-              <el-form-item label="权限标识" required>
+          <el-row :gutter="20">
+            <el-col :span="12">
+              <el-form-item label="权限标识">
                 <el-input v-model="menuForm.authority" placeholder="请输入权限标识" />
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="排序值" prop="sort" required>
+                <el-input v-model.number="menuForm.sort" placeholder="请输入排序值" />
               </el-form-item>
             </el-col>
           </el-row>
@@ -154,14 +159,19 @@
         align="center"
       >
         <template v-slot="scope">
-          <el-tag :type="scope.row.alwaysShow ? 'warning' : 'success'">
-            {{ scope.row.alwaysShow ? '否' : '是' }}
+          <el-tag :type="scope.row.alwaysShow ? 'success' : 'warning'">
+            {{ scope.row.alwaysShow ? '是' : '否' }}
           </el-tag>
         </template>
       </el-table-column>
       <el-table-column
         prop="authority"
         label="权限标识"
+        align="center"
+      />
+      <el-table-column
+        prop="sort"
+        label="排序号"
         align="center"
       />
       <el-table-column
@@ -221,10 +231,10 @@
     <!-- 修改菜单 -->
     <div>
       <el-dialog title="修改菜单" :visible.sync="editFormOpen" @close="resetMenuForm">
-        <el-form ref="editForm" :model="menuForm" label-width="100px">
+        <el-form ref="editForm" :model="menuForm" :rules="rules" label-width="100px">
           <el-row :gutter="20">
             <el-col :span="12">
-              <el-form-item label="父级菜单" required>
+              <el-form-item label="父级菜单" prop="parentId" required>
                 <el-popover
                   ref="popoverRef"
                   placement="bottom"
@@ -255,32 +265,32 @@
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item label="菜单名称" required>
+              <el-form-item label="菜单名称" prop="name" required>
                 <el-input v-model="menuForm.name" placeholder="请输入菜单名称" />
               </el-form-item>
             </el-col>
           </el-row>
           <el-row :gutter="20">
             <el-col :span="12">
-              <el-form-item label="菜单路由" required>
+              <el-form-item label="菜单路由" prop="path" required>
                 <el-input v-model="menuForm.path" placeholder="请输入菜单路由" />
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item label="菜单组件" required>
+              <el-form-item label="菜单组件" prop="component" required>
                 <el-input v-model="menuForm.component" placeholder="请输入菜单组件" />
               </el-form-item>
             </el-col>
           </el-row>
           <el-row :gutter="20">
             <el-col :span="12">
-              <el-form-item label="组件名称" required>
+              <el-form-item label="组件名称" prop="componentName" required>
                 <el-input v-model="menuForm.componentName" placeholder="请输入组件名称" />
               </el-form-item>
             </el-col>
             <el-col :span="12">
               <el-form-item label="菜单图标">
-                <el-input v-model="menuForm.icon" placeholder="请输入菜单名称" readonly @click.native="iconDrawer = true" />
+                <el-input v-model="menuForm.icon" prop="icon" placeholder="请输入菜单名称" readonly @click.native="iconDrawer = true" />
               </el-form-item>
             </el-col>
           </el-row>
@@ -312,10 +322,15 @@
               </el-form-item>
             </el-col>
           </el-row>
-          <el-row>
-            <el-col>
-              <el-form-item label="权限标识" required>
+          <el-row :gutter="20">
+            <el-col :span="12">
+              <el-form-item label="权限标识">
                 <el-input v-model="menuForm.authority" placeholder="请输入权限标识" />
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="排序值" prop="sort" required>
+                <el-input v-model.number="menuForm.sort" placeholder="请输入排序值" />
               </el-form-item>
             </el-col>
           </el-row>
@@ -350,6 +365,17 @@ export default {
         children: 'children',
         label: 'name'
       },
+      rules: {
+        parentId: [{ required: true, message: '父级ID不能为空', trigger: 'blur' }],
+        name: [{ required: true, message: '菜单名称不能为空', trigger: 'blur' }],
+        path: [{ required: true, message: '菜单路径不能为空', trigger: 'blur' }],
+        component: [{ required: true, message: '菜单组件不能为空', trigger: 'blur' }],
+        componentName: [{ required: true, message: '组件名称不能为空', trigger: 'blur' }],
+        sort: [
+          { required: true, message: '排序值不能为空', trigger: 'blur' },
+          { type: 'number', message: '排序值必须为数字' }
+        ]
+      },
       menuForm: {
         // 菜单名称
         name: '',
@@ -365,6 +391,8 @@ export default {
         hidden: false,
         // 权限标识
         authority: '',
+        // 排序值
+        sort: '',
         // 是否一直显示（根目录）
         alwaysShow: true,
         // 父ID
@@ -410,6 +438,8 @@ export default {
         hidden: false,
         // 权限标识
         authority: '',
+        // 排序值
+        sort: '',
         // 是否一直显示（根目录）
         alwaysShow: true,
         // 父ID
@@ -418,6 +448,12 @@ export default {
         parentName: ''
       }
       this.checkedKey = ''
+      if (this.$refs.addForm) {
+        this.$refs.addForm.clearValidate()
+      }
+      if (this.$refs.editForm) {
+        this.$refs.editForm.clearValidate()
+      }
     },
     // 设置父级菜单
     setParentMenu(data, isChecked) {
@@ -439,7 +475,6 @@ export default {
     },
     // 基础操作
     add() {
-      console.log(this.menuForm)
       add(this.menuForm).then(resp => {
         if (resp.code === 200) {
           this.initMenuTree()

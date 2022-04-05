@@ -61,4 +61,9 @@ public class MenuDTO implements Serializable {
      * 父id
      */
     private Integer parentId;
+
+    /**
+     * 排序
+     */
+    private Integer sort;
 }

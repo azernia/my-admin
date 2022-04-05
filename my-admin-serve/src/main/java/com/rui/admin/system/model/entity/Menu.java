@@ -77,4 +77,9 @@ public class Menu extends BaseEntity {
      */
     private Integer parentId;
 
+    /**
+     * 排序
+     */
+    private Integer sort;
+
 }

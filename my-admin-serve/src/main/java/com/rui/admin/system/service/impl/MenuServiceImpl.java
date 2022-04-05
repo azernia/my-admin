@@ -67,6 +67,12 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
         }
     }
 
+    @Override
+    public RespBean edit(MenuDTO menuDTO) {
+
+        return null;
+    }
+
     /**
      * 处理菜单列表
      *
@@ -91,6 +97,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
                 map.put("alwaysShow", menu.getAlwaysShow());
                 map.put("authority", menu.getAuthority());
                 map.put("hidden", menu.getHidden());
+                map.put("sort", menu.getSort());
                 map.put("children", handleMenuList(menus, menu.getId()));
                 list.add(map);
             }

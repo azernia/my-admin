@@ -38,4 +38,8 @@ public class MenuController {
     public RespBean add(MenuDTO menuDTO) {
         return menuService.add(menuDTO);
     }
+
+    public RespBean edit(MenuDTO menuDTO) {
+        return menuService.edit(menuDTO);
+    }
 }

@@ -51,4 +51,12 @@ public interface MenuService extends IService<Menu> {
      * @return {@link RespBean}
      */
     RespBean add(MenuDTO menuDTO);
+
+    /**
+     * 编辑
+     *
+     * @param menuDTO 菜单dto
+     * @return {@link RespBean}
+     */
+    RespBean edit(MenuDTO menuDTO);
 }

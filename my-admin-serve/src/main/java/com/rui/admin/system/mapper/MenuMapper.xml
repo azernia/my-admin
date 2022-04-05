@@ -19,6 +19,7 @@
                  left join sys_role_menu srm on sru.role_id = srm.role_id
                  left join sys_menu sm on sm.id = srm.menu_id
         where sru.user_id = #{userId} and sr.enable = true
+        order by sm.sort
     </select>
 
     <select id="getMenuPermissionByMenuId" resultType="java.lang.String">
@@ -30,5 +31,6 @@
         sm.*,
         (select sm2.name from sys_menu sm2 where sm2.id = sm.parent_id) as parentName
         from sys_menu sm
+        order by sm.sort
     </select>
 </mapper>
