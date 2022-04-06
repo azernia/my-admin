@@ -35,7 +35,7 @@ public class RespConstant {
     /**
      * 修改成功
      */
-    public static final String UPDATE_SUCCESS = "添加成功";
+    public static final String UPDATE_SUCCESS = "修改陈宫";
 
     /**
      * 添加失败
@@ -45,11 +45,16 @@ public class RespConstant {
     /**
      * 更新失败
      */
-    public static final String UPDATE_FAIL = "更新失败";
+    public static final String UPDATE_FAIL = "修改失败";
 
     /**
      * 删除失败
      */
     public static final String DELETE_FAIL = "删除失败";
+
+    /**
+     * 此数据不存在
+     */
+    public static final String NO_EXIST = "此数据不存在";
 
 }

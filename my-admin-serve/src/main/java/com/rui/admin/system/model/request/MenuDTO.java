@@ -18,6 +18,11 @@ import java.io.Serializable;
 public class MenuDTO implements Serializable {
 
     /**
+     * id
+     */
+    private Integer id;
+
+    /**
      * 菜单名称
      */
     private String name;

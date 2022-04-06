@@ -1,5 +1,8 @@
 package com.rui.admin.system.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.bean.copier.CopyOptions;
+import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.rui.admin.commons.constants.RedisConstant;
 import com.rui.admin.commons.constants.RespConstant;
@@ -69,8 +72,14 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
 
     @Override
     public RespBean edit(MenuDTO menuDTO) {
-
-        return null;
+        Menu menu = queryMenu(menuDTO.getId());
+        CopyOptions copyOptions = CopyOptions.create().setEditable(Menu.class).ignoreNullValue();
+        BeanUtil.copyProperties(menuDTO, menu, copyOptions);
+        if (updateById(menu)) {
+            return RespBean.success(RespConstant.UPDATE_SUCCESS);
+        } else {
+            throw new BusinessException(RespConstant.UPDATE_FAIL);
+        }
     }
 
     /**
@@ -103,5 +112,19 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
             }
         }
         return list;
+    }
+
+    /**
+     * 查询菜单
+     *
+     * @param id id
+     * @return {@link Menu}
+     */
+    private Menu queryMenu(Integer id) {
+        Menu menu = getById(id);
+        if (ObjectUtil.isNull(menu)) {
+            throw new BusinessException(RespConstant.NO_EXIST);
+        }
+        return menu;
     }
 }
