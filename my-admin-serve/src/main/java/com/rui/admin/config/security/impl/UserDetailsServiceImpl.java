@@ -32,6 +32,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             throw new UsernameNotFoundException("用户名或密码错误");
         }
         // 菜单权限列表
+        // TODO 根据角色获取权限
         List<String> menuPermissions = menuService.getMenuPermissions(user.getId());
         List<String> collect = menuPermissions.stream().filter(Objects::nonNull).filter(ObjectUtil::isNotEmpty).collect(Collectors.toList());
         return new LoginUser(user, collect);

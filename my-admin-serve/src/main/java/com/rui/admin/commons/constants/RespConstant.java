@@ -35,7 +35,7 @@ public class RespConstant {
     /**
      * 修改成功
      */
-    public static final String UPDATE_SUCCESS = "修改陈宫";
+    public static final String UPDATE_SUCCESS = "修改成功";
 
     /**
      * 添加失败

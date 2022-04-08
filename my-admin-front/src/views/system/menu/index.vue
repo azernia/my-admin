@@ -112,6 +112,7 @@
       row-key="id"
       border
       :tree-props="{children: 'children'}"
+      :default-expand-all="true"
     >
       <el-table-column
         prop="name"
@@ -413,7 +414,6 @@ export default {
         const resp = await getMenus()
         if (resp) {
           this.tableData = resp.data
-          this.loading = false
         }
       } catch (e) {
         console.error(e)
@@ -522,10 +522,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.op-container {
-  margin-left: 10px;
-  padding: 10px 0;
-}
 .switch-item {
   padding-top: 7px;
 }

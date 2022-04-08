@@ -1,7 +1,5 @@
 package com.rui.admin.system.model.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.rui.admin.commons.entity.BaseEntity;
 import lombok.AllArgsConstructor;
@@ -23,11 +21,7 @@ public class Permissions extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
 
-    /**
-    * ID 雪花算法填充
-    */
-    @TableId(value = "id", type = IdType.ASSIGN_ID)
-    private Integer id;
+    private String id;
 
     /**
     * 模块名

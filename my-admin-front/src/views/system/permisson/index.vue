@@ -1,78 +1,103 @@
 <template>
-  <div class="app-container">
-    <el-table
-      v-loading="listLoading"
-      :data="list"
-      element-loading-text="Loading"
-      border
-      fit
-      highlight-current-row
-    >
-      <el-table-column align="center" label="ID" width="95">
-        <template slot-scope="scope">
-          {{ scope.$index }}
-        </template>
-      </el-table-column>
-      <el-table-column label="Title">
-        <template slot-scope="scope">
-          {{ scope.row.title }}
-        </template>
-      </el-table-column>
-      <el-table-column label="Author" width="110" align="center">
-        <template slot-scope="scope">
-          <span>{{ scope.row.author }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="Pageviews" width="110" align="center">
-        <template slot-scope="scope">
-          {{ scope.row.pageviews }}
-        </template>
-      </el-table-column>
-      <el-table-column class-name="status-col" label="Status" width="110" align="center">
-        <template slot-scope="scope">
-          <el-tag :type="scope.row.status | statusFilter">{{ scope.row.status }}</el-tag>
-        </template>
-      </el-table-column>
-      <el-table-column align="center" prop="created_at" label="Display_time" width="200">
-        <template slot-scope="scope">
-          <i class="el-icon-time" />
-          <span>{{ scope.row.display_time }}</span>
-        </template>
-      </el-table-column>
-    </el-table>
+  <div>
+    <div class="op-container">
+      <el-button type="warning" @click="syncPermission">同步权限</el-button>
+    </div>
+    <div>
+      <el-table
+        v-loading="loading"
+        :data="permissionList"
+        row-key="id"
+        border
+        style="width: 100%; height: calc(100vh - 110px)"
+      >
+        <el-table-column
+          label="序号"
+          type="index"
+          align="center"
+        />
+        <el-table-column
+          prop="moduleName"
+          label="模块名"
+          align="center"
+        />
+        <el-table-column
+          prop="funcName"
+          label="功能名称"
+          align="center"
+        />
+        <el-table-column
+          prop="authority"
+          label="权限标识"
+          align="center"
+        />
+        <el-table-column
+          prop="createTime"
+          label="创建时间"
+          align="center"
+        />
+      </el-table>
+    </div>
   </div>
 </template>
 
 <script>
-import { getList } from '@/api/table'
+import { getPermissions, getSwaggerData, syncPermission } from '@/api/permission'
 
 export default {
-  filters: {
-    statusFilter(status) {
-      const statusMap = {
-        published: 'success',
-        draft: 'gray',
-        deleted: 'danger'
-      }
-      return statusMap[status]
-    }
-  },
+  name: 'Permission',
   data() {
     return {
-      list: null,
-      listLoading: true
+      loading: false,
+      permissionList: [],
+      authorities: []
     }
   },
-  created() {
-    this.fetchData()
+  mounted() {
+    this.initTable()
   },
   methods: {
-    fetchData() {
-      this.listLoading = true
-      getList().then(response => {
-        this.list = response.data.items
-        this.listLoading = false
-      })
+    async initTable() {
+      try {
+        this.loading = true
+        const resp = await getPermissions()
+        if (resp) {
+          this.permissionList = resp.data
+        }
+      } catch (e) {
+        console.error(e)
+      } finally {
+        this.loading = false
+      }
+    },
+    async syncPermission() {
+      try {
+        await this.getInterfaceInfo()
+        await syncPermission({ permissions: JSON.stringify(this.authorities) })
+      } catch (e) {
+        console.error(e)
+      } finally {
+        await this.initTable()
+      }
+    },
+    async getInterfaceInfo() {
+      try {
+        const resp = await getSwaggerData()
+        const paths = Object.keys(resp.paths)
+        paths.forEach(path => {
+          const apiObj = resp.paths[path]
+          const reqs = Object.keys(apiObj)
+          const methodObj = apiObj[reqs]
+          const permission = {
+            moduleName: methodObj.tags[0],
+            funcName: methodObj.summary,
+            authority: reqs[0] + ':' + path
+          }
+          this.authorities.push(permission)
+        })
+      } catch (e) {
+        console.error(e)
+      }
     }
   }
 }

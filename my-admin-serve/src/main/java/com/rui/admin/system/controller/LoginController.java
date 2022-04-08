@@ -4,7 +4,6 @@ import com.rui.admin.commons.entity.RespBean;
 import com.rui.admin.system.model.request.UserDTO;
 import com.rui.admin.system.service.LoginService;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,13 +22,11 @@ public class LoginController {
     @Autowired
     private LoginService loginService;
 
-    @ApiOperation("登录")
     @PostMapping("/login")
     public RespBean login(UserDTO userDTO) {
         return loginService.doLogin(userDTO);
     }
 
-    @ApiOperation("退出登录")
     @GetMapping("/logout")
     public RespBean logout() {
         return loginService.logout();
