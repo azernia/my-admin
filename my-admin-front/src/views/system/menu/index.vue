@@ -7,7 +7,7 @@
         <el-form ref="addForm" :model="menuForm" :rules="rules" label-width="100px">
           <el-row :gutter="20">
             <el-col :span="12">
-              <el-form-item label="父级菜单" prop="parentId" required>
+              <el-form-item label="父级菜单" prop="parentId">
                 <el-popover
                   ref="popoverRef"
                   placement="bottom"
@@ -28,26 +28,26 @@
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item label="菜单名称" prop="name" required>
+              <el-form-item label="菜单名称" prop="name">
                 <el-input v-model="menuForm.name" placeholder="请输入菜单名称" />
               </el-form-item>
             </el-col>
           </el-row>
           <el-row :gutter="20">
             <el-col :span="12">
-              <el-form-item label="菜单路由" prop="path" required>
+              <el-form-item label="菜单路由" prop="path">
                 <el-input v-model="menuForm.path" placeholder="请输入菜单路由" />
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item label="菜单组件" prop="component" required>
+              <el-form-item label="菜单组件" prop="component">
                 <el-input v-model="menuForm.component" placeholder="请输入菜单组件" />
               </el-form-item>
             </el-col>
           </el-row>
           <el-row :gutter="20">
             <el-col :span="12">
-              <el-form-item label="组件名称" prop="componentName" required>
+              <el-form-item label="组件名称" prop="componentName">
                 <el-input v-model="menuForm.componentName" placeholder="请输入组件名称" />
               </el-form-item>
             </el-col>
@@ -234,7 +234,7 @@
         <el-form ref="editForm" :model="menuForm" :rules="rules" label-width="100px">
           <el-row :gutter="20">
             <el-col :span="12">
-              <el-form-item label="父级菜单" prop="parentId" required>
+              <el-form-item label="父级菜单" prop="parentId">
                 <el-popover
                   ref="popoverRef"
                   placement="bottom"
@@ -265,26 +265,26 @@
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item label="菜单名称" prop="name" required>
+              <el-form-item label="菜单名称" prop="name">
                 <el-input v-model="menuForm.name" placeholder="请输入菜单名称" />
               </el-form-item>
             </el-col>
           </el-row>
           <el-row :gutter="20">
             <el-col :span="12">
-              <el-form-item label="菜单路由" prop="path" required>
+              <el-form-item label="菜单路由" prop="path">
                 <el-input v-model="menuForm.path" placeholder="请输入菜单路由" />
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item label="菜单组件" prop="component" required>
+              <el-form-item label="菜单组件" prop="component">
                 <el-input v-model="menuForm.component" placeholder="请输入菜单组件" />
               </el-form-item>
             </el-col>
           </el-row>
           <el-row :gutter="20">
             <el-col :span="12">
-              <el-form-item label="组件名称" prop="componentName" required>
+              <el-form-item label="组件名称" prop="componentName">
                 <el-input v-model="menuForm.componentName" placeholder="请输入组件名称" />
               </el-form-item>
             </el-col>
@@ -337,7 +337,7 @@
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button @click="editFormOpen = false">取 消</el-button>
-          <el-button type="primary" @click="editFormOpen = false">确 定</el-button>
+          <el-button type="primary" @click="edit">确 定</el-button>
         </div>
       </el-dialog>
     </div>
@@ -345,7 +345,7 @@
 </template>
 
 <script>
-import { getMenus, add } from '@/api/menu'
+import { getMenus, add, edit } from '@/api/menu'
 // 菜单图标
 import svgIcons from '@/assets/icons/svg-icons'
 import elementIcons from '@/assets/icons/element-icons'
@@ -486,6 +486,15 @@ export default {
       })
     },
     edit() {
+      edit(this.menuForm).then(resp => {
+        if (resp.code === 200) {
+          this.initMenuTree()
+        }
+      }).catch(error => {
+        console.error(error)
+      }).finally(() => {
+        this.editFormOpen = false
+      })
     },
     showEditForm(data) {
       Object.assign(this.menuForm, data)

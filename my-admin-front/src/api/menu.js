@@ -14,3 +14,11 @@ export function add(data) {
     data
   })
 }
+
+export function edit(data) {
+  return request({
+    url: '/menu/edit',
+    method: 'PUT',
+    data
+  })
+}

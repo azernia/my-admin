@@ -7,10 +7,7 @@ import com.rui.admin.system.service.MenuService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * 系统菜单表 前端控制器
@@ -39,6 +36,8 @@ public class MenuController {
         return menuService.add(menuDTO);
     }
 
+    @ApiOperation("修改菜单")
+    @PutMapping("/edit")
     public RespBean edit(MenuDTO menuDTO) {
         return menuService.edit(menuDTO);
     }

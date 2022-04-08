@@ -36,9 +36,18 @@ public class RedisConfig {
         redisTemplate.setKeySerializer(new StringRedisSerializer());
         redisTemplate.setHashKeySerializer(new StringRedisSerializer());
         redisTemplate.setConnectionFactory(redisConnectionFactory);
+        // TODO Redis 事务
+        // 启用 Redis 事务支持
+        // redisTemplate.setEnableTransactionSupport(true);
         // 初始化 RedisTemplate
         redisTemplate.afterPropertiesSet();
         return redisTemplate;
     }
+
+    // 事务管理器
+    // @Bean
+    // public PlatformTransactionManager transactionManager(DataSource dataSource) {
+    //     return new DataSourceTransactionManager(dataSource);
+    // }
 
 }

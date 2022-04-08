@@ -62,20 +62,21 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
     public RespBean add(MenuDTO menuDTO) {
         Menu menu = BeanCopyUtils.copyBean(menuDTO, Menu.class);
         if (save(menu)) {
-            redisCacheUtils.deleteObject(RedisConstant.LOGIN_MENU);
-            redisCacheUtils.setCacheList(RedisConstant.LOGIN_MENU, list());
+            updateRedisMenuData();
             return RespBean.success(RespConstant.ADD_SUCCESS);
         } else {
             throw new BusinessException(RespConstant.ADD_FAIL);
         }
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public RespBean edit(MenuDTO menuDTO) {
         Menu menu = queryMenu(menuDTO.getId());
         CopyOptions copyOptions = CopyOptions.create().setEditable(Menu.class).ignoreNullValue();
         BeanUtil.copyProperties(menuDTO, menu, copyOptions);
         if (updateById(menu)) {
+            updateRedisMenuData();
             return RespBean.success(RespConstant.UPDATE_SUCCESS);
         } else {
             throw new BusinessException(RespConstant.UPDATE_FAIL);
@@ -126,5 +127,13 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
             throw new BusinessException(RespConstant.NO_EXIST);
         }
         return menu;
+    }
+
+    /**
+     * 更新 Redis 菜单数据
+     */
+    private void updateRedisMenuData() {
+        redisCacheUtils.deleteObject(RedisConstant.LOGIN_MENU);
+        redisCacheUtils.setCacheList(RedisConstant.LOGIN_MENU, list());
     }
 }
