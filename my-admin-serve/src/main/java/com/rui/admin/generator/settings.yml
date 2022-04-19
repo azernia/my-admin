@@ -4,13 +4,13 @@ setting:
   # 去除的表前缀,多个以 , 分隔, 不能有空格
   tablePrefix: sys_
   # 表名多个以 , 分隔, 不能有空格
-  tableName: sys_role_permissions
+  tableName: sys_log
   # 模块名
   moduleName: system
   # 包路径
   packagePath: com.rui.admin
   # 后端代码生成路径
-  serveOutPath: /Users/JavaWorkSpace/my-admin/src/main/java
+  serveOutPath: /Users/JavaWorkSpace/my-admin/my-admin-serve/src/main/java
 #  serveOutPath: D:\\Project\\my-admin\\src\\main\\java
   serveModelOutPath: /com/rui/admin
   # 前端代码生成路径
