@@ -1,5 +1,6 @@
 package com.rui.admin.system.controller;
 
+import com.rui.admin.commons.annotation.log.SystemLog;
 import com.rui.admin.commons.entity.RespBean;
 import com.rui.admin.system.model.request.UserDTO;
 import com.rui.admin.system.service.LoginService;
@@ -23,6 +24,7 @@ public class LoginController {
     private LoginService loginService;
 
     @PostMapping("/login")
+    @SystemLog(businessName = "登录")
     public RespBean login(UserDTO userDTO) {
         return loginService.doLogin(userDTO);
     }
@@ -33,6 +35,7 @@ public class LoginController {
     }
 
     @GetMapping("/getUserInfo")
+    @SystemLog(businessName = "获取用户信息")
     public RespBean getUserInfo() {
         return loginService.getUserInfo();
     }
