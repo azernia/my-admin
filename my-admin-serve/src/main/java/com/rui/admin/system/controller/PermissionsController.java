@@ -21,8 +21,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/rui/admin/permissions")
 public class PermissionsController {
+    private final PermissionsService permissionsService;
+
     @Autowired
-    private PermissionsService permissionsService;
+    public PermissionsController(PermissionsService permissionsService) {
+        this.permissionsService = permissionsService;
+    }
 
     @ApiOperation("获取权限列表")
     @GetMapping("/getPermissions")

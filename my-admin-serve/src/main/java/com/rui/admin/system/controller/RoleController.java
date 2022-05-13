@@ -20,8 +20,12 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/rui/admin/role")
 public class RoleController {
 
+    private final RoleService roleService;
+
     @Autowired
-    private RoleService roleService;
+    public RoleController(RoleService roleService) {
+        this.roleService = roleService;
+    }
 
     @PreAuthorize("hasAuthority('get:/rui/admin/role/pageList')")
     @GetMapping("/pageList")

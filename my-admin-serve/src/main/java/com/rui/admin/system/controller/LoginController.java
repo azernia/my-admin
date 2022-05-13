@@ -20,8 +20,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/rui/admin")
 public class LoginController {
 
+    private final LoginService loginService;
+
     @Autowired
-    private LoginService loginService;
+    public LoginController(LoginService loginService) {
+        this.loginService = loginService;
+    }
 
     @PostMapping("/login")
     @SystemLog(businessName = "登录")

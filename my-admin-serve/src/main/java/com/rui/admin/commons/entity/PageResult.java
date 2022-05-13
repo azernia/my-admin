@@ -23,7 +23,7 @@ public class PageResult<T> implements Serializable {
     /**
      * 消息
      */
-    private String msg = "请求成功";
+    private String msg = "";
 
     /**
      * 第几页

@@ -19,11 +19,14 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/rui/admin/menu")
 public class MenuController {
+    private final MenuService menuService;
+
     @Autowired
-    private MenuService menuService;
+    public MenuController(MenuService menuService) {
+        this.menuService = menuService;
+    }
 
     @ApiOperation("菜单列表")
-    @Autowired
     @GetMapping("/menuList")
     public RespBean menuList() {
         return menuService.menuList();
