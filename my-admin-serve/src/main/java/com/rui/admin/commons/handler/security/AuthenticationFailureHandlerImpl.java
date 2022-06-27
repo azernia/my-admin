@@ -1,7 +1,7 @@
 package com.rui.admin.commons.handler.security;
 
 import com.alibaba.fastjson.JSON;
-import com.rui.admin.commons.constants.RespConstant;
+import com.rui.admin.commons.constants.RespConstants;
 import com.rui.admin.commons.entity.RespBean;
 import com.rui.admin.commons.utils.WebUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -32,7 +32,7 @@ public class AuthenticationFailureHandlerImpl implements AuthenticationFailureHa
         } else if (e instanceof AccountExpiredException) {
             fail = RespBean.fail("账户过期，请联系管理员!");
         } else if (e instanceof DisabledException) {
-            fail = RespBean.fail(RespConstant.LOCKED,"账户被禁用，请联系管理员!");
+            fail = RespBean.fail(RespConstants.LOCKED,"账户被禁用，请联系管理员!");
         } else if (e instanceof BadCredentialsException) {
             fail = RespBean.fail("用户名或者密码输入错误，请重新输入!");
         } else {

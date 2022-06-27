@@ -7,6 +7,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
+import org.springframework.security.oauth2.provider.token.TokenStore;
+import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStore;
 
 /**
  * @author rui
@@ -14,6 +16,21 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
  */
 @Configuration
 public class RedisConfig {
+
+    private final RedisConnectionFactory redisConnectionFactory;
+
+    public RedisConfig(RedisConnectionFactory redisConnectionFactory) {
+        this.redisConnectionFactory = redisConnectionFactory;
+    }
+
+    /**
+     * Redis 存储 token
+     * @return {@link TokenStore}
+     */
+    @Bean
+    public TokenStore redisTokenStore() {
+        return new RedisTokenStore(redisConnectionFactory);
+    }
 
     /**
      * 自定义 RedisTemplate

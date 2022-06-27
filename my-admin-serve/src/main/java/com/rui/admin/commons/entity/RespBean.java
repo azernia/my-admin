@@ -1,6 +1,6 @@
 package com.rui.admin.commons.entity;
 
-import com.rui.admin.commons.constants.RespConstant;
+import com.rui.admin.commons.constants.RespConstants;
 
 public class RespBean {
     private Integer code;
@@ -8,23 +8,23 @@ public class RespBean {
     private Object data;
 
     public static RespBean success() {
-        return new RespBean(RespConstant.SUCCESS_CODE, "操作成功", null);
+        return new RespBean(RespConstants.SUCCESS_CODE, "操作成功", null);
     }
 
     public static RespBean success(String msg) {
-        return new RespBean(RespConstant.SUCCESS_CODE, msg, null);
+        return new RespBean(RespConstants.SUCCESS_CODE, msg, null);
     }
 
     public static RespBean success(Object data) {
-        return new RespBean(RespConstant.SUCCESS_CODE, null, data);
+        return new RespBean(RespConstants.SUCCESS_CODE, null, data);
     }
 
     public static RespBean success(String msg, Object data) {
-        return new RespBean(RespConstant.SUCCESS_CODE, msg, data);
+        return new RespBean(RespConstants.SUCCESS_CODE, msg, data);
     }
 
     public static RespBean fail(String msg) {
-        return new RespBean(RespConstant.ERROR_CODE, msg, null);
+        return new RespBean(RespConstants.ERROR_CODE, msg, null);
     }
 
     public static RespBean fail(Integer code, String msg) {

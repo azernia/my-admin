@@ -4,8 +4,8 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.rui.admin.commons.constants.RedisConstant;
-import com.rui.admin.commons.constants.RespConstant;
+import com.rui.admin.commons.constants.RedisConstants;
+import com.rui.admin.commons.constants.RespConstants;
 import com.rui.admin.commons.entity.RespBean;
 import com.rui.admin.commons.exception.BusinessException;
 import com.rui.admin.commons.utils.BeanCopyUtils;
@@ -63,9 +63,9 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
         Menu menu = BeanCopyUtils.copyBean(menuDTO, Menu.class);
         if (save(menu)) {
             updateRedisMenuData();
-            return RespBean.success(RespConstant.ADD_SUCCESS);
+            return RespBean.success(RespConstants.ADD_SUCCESS);
         } else {
-            throw new BusinessException(RespConstant.ADD_FAIL);
+            throw new BusinessException(RespConstants.ADD_FAIL);
         }
     }
 
@@ -77,9 +77,9 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
         BeanUtil.copyProperties(menuDTO, menu, copyOptions);
         if (updateById(menu)) {
             updateRedisMenuData();
-            return RespBean.success(RespConstant.UPDATE_SUCCESS);
+            return RespBean.success(RespConstants.UPDATE_SUCCESS);
         } else {
-            throw new BusinessException(RespConstant.UPDATE_FAIL);
+            throw new BusinessException(RespConstants.UPDATE_FAIL);
         }
     }
 
@@ -124,7 +124,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
     private Menu queryMenu(Integer id) {
         Menu menu = getById(id);
         if (ObjectUtil.isNull(menu)) {
-            throw new BusinessException(RespConstant.NO_EXIST);
+            throw new BusinessException(RespConstants.NO_EXIST);
         }
         return menu;
     }
@@ -133,7 +133,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
      * 更新 Redis 菜单数据
      */
     private void updateRedisMenuData() {
-        redisCacheUtils.deleteObject(RedisConstant.LOGIN_MENU);
-        redisCacheUtils.setCacheList(RedisConstant.LOGIN_MENU, list());
+        redisCacheUtils.deleteObject(RedisConstants.LOGIN_MENU);
+        redisCacheUtils.setCacheList(RedisConstants.LOGIN_MENU, list());
     }
 }

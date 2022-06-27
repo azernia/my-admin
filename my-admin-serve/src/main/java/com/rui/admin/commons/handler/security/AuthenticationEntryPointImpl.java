@@ -1,7 +1,7 @@
 package com.rui.admin.commons.handler.security;
 
 import com.alibaba.fastjson.JSON;
-import com.rui.admin.commons.constants.RespConstant;
+import com.rui.admin.commons.constants.RespConstants;
 import com.rui.admin.commons.entity.RespBean;
 import com.rui.admin.commons.utils.WebUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +23,7 @@ public class AuthenticationEntryPointImpl implements AuthenticationEntryPoint {
         if(e instanceof BadCredentialsException) {
             fail = RespBean.fail("登录失败");
         } else if(e instanceof InsufficientAuthenticationException) {
-            fail = RespBean.fail(RespConstant.NEED_LOGIN, "需要重新登录");
+            fail = RespBean.fail(RespConstants.NEED_LOGIN, "需要重新登录");
         } else if(e instanceof LockedException) {
             fail = RespBean.fail("账户被锁定，请联系管理员");
         } else if(e instanceof CredentialsExpiredException) {

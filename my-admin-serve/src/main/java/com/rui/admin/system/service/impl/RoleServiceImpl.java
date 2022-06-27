@@ -5,7 +5,7 @@ import cn.hutool.core.bean.copier.CopyOptions;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.rui.admin.commons.constants.RespConstant;
+import com.rui.admin.commons.constants.RespConstants;
 import com.rui.admin.commons.entity.PageResult;
 import com.rui.admin.commons.entity.RespBean;
 import com.rui.admin.commons.enums.ServerExceptionEnum;
@@ -18,8 +18,6 @@ import com.rui.admin.system.model.request.RoleDTO;
 import com.rui.admin.system.service.RoleService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 /**
 * 系统角色 服务实现类
@@ -53,9 +51,9 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     public RespBean add(RoleDTO roleDTO) {
         Role role = BeanCopyUtils.copyBean(roleDTO, Role.class);
         if (save(role)) {
-            return RespBean.success(RespConstant.ADD_SUCCESS);
+            return RespBean.success(RespConstants.ADD_SUCCESS);
         } else {
-            throw new BusinessException(RespConstant.ADD_FAIL);
+            throw new BusinessException(RespConstants.ADD_FAIL);
         }
     }
 
@@ -69,9 +67,9 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         CopyOptions copyOptions = CopyOptions.create().setEditable(Role.class).ignoreNullValue();
         BeanUtil.copyProperties(roleDTO, role, copyOptions);
         if (updateById(role)) {
-            return RespBean.success(RespConstant.UPDATE_SUCCESS);
+            return RespBean.success(RespConstants.UPDATE_SUCCESS);
         } else {
-            throw new BusinessException(RespConstant.UPDATE_FAIL);
+            throw new BusinessException(RespConstants.UPDATE_FAIL);
         }
     }
 
@@ -79,9 +77,9 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     @Override
     public RespBean delete(Integer id) {
         if (removeById(id)) {
-            return RespBean.success(RespConstant.DELETE_SUCCESS);
+            return RespBean.success(RespConstants.DELETE_SUCCESS);
         } else {
-            throw new BusinessException(RespConstant.DELETE_FAIL);
+            throw new BusinessException(RespConstants.DELETE_FAIL);
         }
     }
 }
