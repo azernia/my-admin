@@ -10,6 +10,8 @@ package com.rui.admin.commons.constants;
 public interface OAuth2Constants {
     String CLIENT_ID = "rui";
 
+    String CLIENT_SECRET = "rui_secret";
+
     String RESOURCE_IDS = "";
 
     String SCOPE_ALL = "all";
