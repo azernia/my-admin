@@ -9,4 +9,9 @@ public interface SystemConstants {
      * . 分隔
      */
     String POINT_SEPARATE = ".";
+
+    /**
+     * , 分隔
+     */
+    String COMMA_SEPARATE = ",";
 }

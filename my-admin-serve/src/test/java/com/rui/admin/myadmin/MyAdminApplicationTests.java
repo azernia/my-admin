@@ -3,12 +3,15 @@ package com.rui.admin.myadmin;
 import cn.hutool.jwt.JWT;
 import cn.hutool.jwt.JWTUtil;
 import cn.hutool.jwt.JWTValidator;
+import com.rui.admin.system.model.entity.Client;
 import com.rui.admin.system.model.entity.Menu;
+import com.rui.admin.system.service.ClientService;
 import com.rui.admin.system.service.MenuService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.nio.charset.StandardCharsets;
 
@@ -21,8 +24,22 @@ class MyAdminApplicationTests {
     @Autowired
     private RedisTemplate redisTemplate;
 
+    @Autowired
+    private ClientService clientService;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @Test
-    void contextLoads() {
+    public void saveClient() {
+        Client client = new Client();
+        client.setClientId("rui");
+        client.setClientSecret(passwordEncoder.encode("rui_web_app"));
+        client.setScope("web_app");
+        client.setAuthorizedGrantTypes("password,refresh_token,authorization_code,implicit");
+        client.setAccessTokenValiditySeconds(7200);
+        client.setRefreshTokenValiditySeconds(36000);
+        clientService.save(client);
     }
 
     @Test
